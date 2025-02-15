@@ -124,7 +124,7 @@ function LocationBlock({ location, setLocation, meetingMemo, setMeetingMemo }) {
           height="100%"
           frameBorder="0"
           style={{ border: 0 }}
-          src={`https://www.google.com/maps/embed/v1/place?key=YOUR_API_KEY&q=${mapQuery}`}
+          src={`https://www.google.com/maps/embed/v1/place?key=YOUR_API_KEY&q=AIzaSyBFtHIML9rRnOnQ-BYX9RIQLa3vHiCBXYw`}
           allowFullScreen
           title="Google Map"
         ></iframe>
