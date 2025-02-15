@@ -17,7 +17,7 @@ export function HomePage() {
         onClick={() => navigate('/create')}
         className="bg-gradient-to-r from-teal-400 to-blue-500 text-white px-12 py-4 rounded-full text-3xl shadow-md hover:shadow-xl transition"
       >
-        イベントを作成する！
+        イベントを作成！
       </motion.button>
     </div>
   );
