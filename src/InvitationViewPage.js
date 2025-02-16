@@ -258,9 +258,22 @@ export function InvitationViewPage() {
     return { netBalances, settlements };
   };
   
-
   // 精算結果（「精算を計算する！」ボタン押下時に利用）
   const settlementResult = computeSettlement();
+  // 精算結果のテキストを作成（各行：「支払者 → 対象者 : ¥金額」）
+  const settlementText =
+    settlementResult.settlements && settlementResult.settlements.length > 0
+      ? settlementResult.settlements
+          .map((s) => `${s.from} → ${s.to} : ¥${s.amount}`)
+          .join('\n')
+      : '全員清算済みです';
+
+  // 精算結果をクリップボードにコピーする処理
+  const handleCopySettlement = () => {
+    navigator.clipboard.writeText(settlementText).then(() => {
+      alert('精算結果をコピーしました');
+    });
+  };
 
   if (loading) return <div>読み込み中…</div>;
   if (error) return <div>{error}</div>;
@@ -371,9 +384,10 @@ export function InvitationViewPage() {
                 </p>
               </div>
             )}
+            {/* 修正: 集合場所メモのフォントサイズを小さく */}
             {eventData.meetingMemo && (
               <div className="p-4 bg-white border-t border-gray-200">
-                <p className="text-lg text-gray-700 text-center">
+                <p className="text-sm text-gray-700 text-center">
                   {eventData.meetingMemo}
                 </p>
               </div>
@@ -465,8 +479,8 @@ export function InvitationViewPage() {
                       <p className="text-xl font-medium text-gray-700">
                         {tx.description}
                       </p>
-                      {/* 修正: 「支払者 → 対象者, …」のみ表示 */}
-                      <p className="text-base text-gray-500">
+                      {/* 修正: 支払者・対象の名前の文字サイズを小さく */}
+                      <p className="text-sm text-gray-500">
                         {tx.payer} → {tx.beneficiaries.join(', ')}
                       </p>
                     </div>
@@ -478,7 +492,7 @@ export function InvitationViewPage() {
                         onClick={() => handleDeleteTransaction(tx.id)}
                         className="text-xl text-red-500 hover:underline"
                       >
-                        削除
+                        取引を削除
                       </button>
                     </div>
                   </li>
@@ -487,7 +501,7 @@ export function InvitationViewPage() {
             </div>
           )}
 
-          {/* 精算計算ボタン：グラデーション変更 */}
+          {/* 精算計算ボタン */}
           {eventData.transactions && eventData.transactions.length >= 2 && (
             <div className="flex justify-center">
               <button
@@ -499,25 +513,26 @@ export function InvitationViewPage() {
             </div>
           )}
 
-          {/* 清算結果 */}
+          {/* 清算結果（コピペ可能に改善） */}
           {showSettlement && (
-            <div className="bg-white border border-gray-200 rounded-2xl shadow-md hover:shadow-xl p-8">
+            <div className="bg-white border border-gray-200 rounded-2xl shadow-md p-8">
               <h3 className="text-center text-2xl font-semibold mb-6 text-purple-800">
                 清算結果
               </h3>
-              {settlementResult.settlements && settlementResult.settlements.length > 0 ? (
-                <ul className="space-y-4">
-                  {settlementResult.settlements.map((s, idx) => (
-                    <li key={idx} className="text-xl text-gray-700">
-                      {s.from} → {s.to} : ¥{s.amount}
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <p className="text-center text-lg text-gray-600">
-                  全員清算済みです
-                </p>
-              )}
+              <textarea
+                readOnly
+                onClick={(e) => e.target.select()}
+                className="w-full h-40 p-4 border border-gray-300 rounded-lg text-sm text-gray-800"
+                value={settlementText}
+              />
+              <div className="flex justify-end mt-2">
+                <button
+                  onClick={handleCopySettlement}
+                  className="bg-gradient-to-r from-purple-500 to-pink-600 text-white px-4 py-2 rounded-full text-sm hover:opacity-90 transition"
+                >
+                  コピー
+                </button>
+              </div>
             </div>
           )}
         </div>
