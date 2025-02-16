@@ -479,7 +479,7 @@ export function InvitationViewPage() {
                       <p className="text-xl font-medium text-gray-700">
                         {tx.description}
                       </p>
-                      {/* 支払者・対象の名前：文字サイズを小さく */}
+                      {/* 支払者・対象の名前：文字サイズ小さく */}
                       <p className="text-sm text-gray-500">
                         {tx.payer} → {tx.beneficiaries.join(', ')}
                       </p>
@@ -488,10 +488,10 @@ export function InvitationViewPage() {
                       <span className="text-xl font-bold text-gray-900">
                         ¥{tx.amount.toLocaleString()}
                       </span>
-                      {/* 削除ボタン：赤い丸に「削除」の文字 */}
+                      {/* 削除ボタン：楕円形に「削除」 */}
                       <button
                         onClick={() => handleDeleteTransaction(tx.id)}
-                        className="w-10 h-10 flex items-center justify-center bg-red-500 text-white rounded-full text-sm"
+                        className="px-3 py-1 bg-red-500 text-white rounded-full text-sm"
                       >
                         削除
                       </button>
@@ -514,24 +514,21 @@ export function InvitationViewPage() {
             </div>
           )}
 
-          {/* 清算結果：テキストエリア＋クリップボードアイコン */}
+          {/* 清算結果：<pre>要素で全て表示 */}
           {showSettlement && (
             <div className="bg-white border border-gray-200 rounded-2xl shadow-md p-8">
               <h3 className="text-center text-2xl font-semibold mb-6 text-purple-800">
                 清算結果
               </h3>
-              <textarea
-                readOnly
-                onClick={(e) => e.target.select()}
-                className="w-full h-40 p-4 text-lg text-gray-800"
-                value={settlementText}
-              />
+              <pre className="w-full p-4 text-base text-gray-800 whitespace-pre-wrap break-words">
+                {settlementText}
+              </pre>
               <div className="flex justify-end mt-2">
                 <button
                   onClick={handleCopySettlement}
-                  className="bg-gradient-to-r from-purple-500 to-pink-600 text-white p-2 rounded-full hover:opacity-90 transition"
+                  className="bg-gray-200 text-gray-800 p-2 rounded-full hover:opacity-90 transition"
                 >
-                  {/* クリップボードのアイコン */}
+                  {/* シンプルなクリップボードアイコン */}
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10m-10 4h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2h-4l-2-2H9L7 5H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                   </svg>
