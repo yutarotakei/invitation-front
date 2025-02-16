@@ -192,15 +192,18 @@ export function InvitationViewPage() {
     });
   }
 
-  // displayedMembers を対象とした精算計算関数
   const computeSettlement = () => {
+    if (!eventData || !eventData.transactions) {
+      return { netBalances: {}, settlements: [] };
+    }
+  
     const netBalances = {};
-
+  
     // displayedMembers を使って、organizer も含む全員の初期残高を設定
     displayedMembers.forEach((member) => {
       netBalances[member.name] = 0;
     });
-
+  
     // 各取引を処理
     eventData.transactions.forEach((tx) => {
       const share = tx.amount / tx.beneficiaries.length;
@@ -217,12 +220,12 @@ export function InvitationViewPage() {
         netBalances[tx.payer] = tx.amount;
       }
     });
-
+  
     // 小数点以下を丸める（必要に応じて調整してください）
     Object.keys(netBalances).forEach((name) => {
       netBalances[name] = Math.round(netBalances[name]);
     });
-
+  
     const settlements = [];
     let creditors = [];
     let debtors = [];
@@ -234,10 +237,10 @@ export function InvitationViewPage() {
         debtors.push({ name, balance });
       }
     });
-
+  
     creditors.sort((a, b) => b.balance - a.balance);
     debtors.sort((a, b) => a.balance - b.balance);
-
+  
     let i = 0,
       j = 0;
     while (i < debtors.length && j < creditors.length) {
@@ -252,9 +255,10 @@ export function InvitationViewPage() {
       if (debtor.balance === 0) i++;
       if (creditor.balance === 0) j++;
     }
-
+  
     return { netBalances, settlements };
   };
+  
 
   // 精算結果（「精算を計算する！」ボタン押下時に利用）
   const settlementResult = computeSettlement();
