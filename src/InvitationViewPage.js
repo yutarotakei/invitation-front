@@ -260,7 +260,7 @@ export function InvitationViewPage() {
   
   // 精算結果（「精算を計算する！」ボタン押下時に利用）
   const settlementResult = computeSettlement();
-  // 精算結果のテキストを作成（各行：「支払者 → 対象者 : ¥金額」）
+  // 精算結果のテキスト（各行：「支払者 → 対象者 : ¥金額」）
   const settlementText =
     settlementResult.settlements && settlementResult.settlements.length > 0
       ? settlementResult.settlements
@@ -384,7 +384,7 @@ export function InvitationViewPage() {
                 </p>
               </div>
             )}
-            {/* 修正: 集合場所メモのフォントサイズを小さく */}
+            {/* 集合場所メモ：フォントサイズ小さく */}
             {eventData.meetingMemo && (
               <div className="p-4 bg-white border-t border-gray-200">
                 <p className="text-sm text-gray-700 text-center">
@@ -479,7 +479,7 @@ export function InvitationViewPage() {
                       <p className="text-xl font-medium text-gray-700">
                         {tx.description}
                       </p>
-                      {/* 修正: 支払者・対象の名前の文字サイズを小さく */}
+                      {/* 支払者・対象の名前：文字サイズを小さく */}
                       <p className="text-sm text-gray-500">
                         {tx.payer} → {tx.beneficiaries.join(', ')}
                       </p>
@@ -488,11 +488,12 @@ export function InvitationViewPage() {
                       <span className="text-xl font-bold text-gray-900">
                         ¥{tx.amount.toLocaleString()}
                       </span>
+                      {/* 削除ボタン：赤い丸に「削除」の文字 */}
                       <button
                         onClick={() => handleDeleteTransaction(tx.id)}
-                        className="text-xl text-red-500 hover:underline"
+                        className="w-10 h-10 flex items-center justify-center bg-red-500 text-white rounded-full text-sm"
                       >
-                        取引を削除
+                        削除
                       </button>
                     </div>
                   </li>
@@ -513,7 +514,7 @@ export function InvitationViewPage() {
             </div>
           )}
 
-          {/* 清算結果（コピペ可能に改善） */}
+          {/* 清算結果：テキストエリア＋クリップボードアイコン */}
           {showSettlement && (
             <div className="bg-white border border-gray-200 rounded-2xl shadow-md p-8">
               <h3 className="text-center text-2xl font-semibold mb-6 text-purple-800">
@@ -522,15 +523,18 @@ export function InvitationViewPage() {
               <textarea
                 readOnly
                 onClick={(e) => e.target.select()}
-                className="w-full h-40 p-4 border border-gray-300 rounded-lg text-sm text-gray-800"
+                className="w-full h-40 p-4 text-lg text-gray-800"
                 value={settlementText}
               />
               <div className="flex justify-end mt-2">
                 <button
                   onClick={handleCopySettlement}
-                  className="bg-gradient-to-r from-purple-500 to-pink-600 text-white px-4 py-2 rounded-full text-sm hover:opacity-90 transition"
+                  className="bg-gradient-to-r from-purple-500 to-pink-600 text-white p-2 rounded-full hover:opacity-90 transition"
                 >
-                  コピー
+                  {/* クリップボードのアイコン */}
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10m-10 4h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2h-4l-2-2H9L7 5H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  </svg>
                 </button>
               </div>
             </div>
