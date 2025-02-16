@@ -268,7 +268,7 @@ export function InvitationCreationPage() {
       }
       const result = await response.json();
       // 作成成功後、取得したイベントIDの固有リンクへ遷移
-      navigate(`/invitation/${result.eventId}`);
+      navigate(`/view/${result.eventId}`);
     } catch (error) {
       console.error(error);
       alert('イベント作成に失敗しました');
