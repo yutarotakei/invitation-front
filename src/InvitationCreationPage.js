@@ -256,7 +256,7 @@ export function InvitationCreationPage() {
   const handleConfirm = async () => {
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_API_URL || ''}/api/events`,
+        `${process.env.REACT_APP_API_URL}/api/events`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
