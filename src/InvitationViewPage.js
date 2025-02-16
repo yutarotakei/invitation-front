@@ -178,70 +178,88 @@ export function InvitationViewPage() {
     }
   };
 
-  // 清算計算（ローカル計算）
-  const computeSettlement = () => {
-    const netBalances = {};
-    eventData.members.forEach((member) => {
-      netBalances[member.name] = 0;
+  // ────────────────────────────────
+  // 新しい精算アルゴリズム
+  // ────────────────────────────────
+
+  // 各取引ごとに、各メンバーの残高を計算する
+  const calculateBalances = (transactions, members) => {
+    const balances = {};
+    // すべてのメンバーの初期残高を 0 に
+    members.forEach((member) => {
+      balances[member.name] = 0;
     });
-    eventData.transactions.forEach((tx) => {
-      const share = tx.amount / tx.beneficiaries.length;
-      tx.beneficiaries.forEach((beneficiary) => {
-        netBalances[beneficiary] -= share;
+    transactions.forEach((tx) => {
+      const amount = tx.amount;
+      // 支払った人の残高に全額を加算
+      balances[tx.payer] += amount;
+      // 対象となる全員で割った分、各参加者の残高から減算
+      const share = amount / tx.beneficiaries.length;
+      tx.beneficiaries.forEach((participant) => {
+        balances[participant] -= share;
       });
-      netBalances[tx.payer] += tx.amount;
     });
-    Object.keys(netBalances).forEach((name) => {
-      netBalances[name] = Math.round(netBalances[name]);
-    });
-    const settlements = [];
-    let creditors = [];
-    let debtors = [];
-    Object.keys(netBalances).forEach((name) => {
-      const balance = netBalances[name];
-      if (balance > 0) {
-        creditors.push({ name, balance });
-      } else if (balance < 0) {
-        debtors.push({ name, balance });
-      }
-    });
-    creditors.sort((a, b) => b.balance - a.balance);
-    debtors.sort((a, b) => a.balance - b.balance);
-    let i = 0,
-      j = 0;
-    while (i < debtors.length && j < creditors.length) {
-      const debtor = debtors[i];
-      const creditor = creditors[j];
-      const amount = Math.min(creditor.balance, -debtor.balance);
-      if (amount > 0) {
-        settlements.push({ from: debtor.name, to: creditor.name, amount });
-        debtor.balance += amount;
-        creditor.balance -= amount;
-      }
-      if (debtor.balance === 0) i++;
-      if (creditor.balance === 0) j++;
-    }
-    return { netBalances, settlements };
+    return balances;
   };
 
-  if (loading) return <div>読み込み中…</div>;
-  if (error) return <div>{error}</div>;
-  if (!eventData) return <div>イベントが見つかりません</div>;
+  // balances から、最終的に誰が誰にいくら払うべきかを算出する
+  const calculateSettlementsLocal = (balances) => {
+    const paymentData = Object.entries(balances).map(([name, balance]) => ({
+      memberName: name,
+      priceToGet: Math.round(balance),
+    }));
+    const creditors = paymentData
+      .filter((p) => p.priceToGet > 0)
+      .sort((a, b) => b.priceToGet - a.priceToGet);
+    const debtors = paymentData
+      .filter((p) => p.priceToGet < 0)
+      .sort((a, b) => a.priceToGet - b.priceToGet);
+    const settlements = [];
+    while (creditors.length && debtors.length) {
+      const creditor = creditors[0];
+      const debtor = debtors[0];
+      const amount = Math.min(creditor.priceToGet, Math.abs(debtor.priceToGet));
+      settlements.push({
+        payer: debtor.memberName,
+        payee: creditor.memberName,
+        amount,
+      });
+      creditor.priceToGet -= amount;
+      debtor.priceToGet += amount;
+      if (creditor.priceToGet <= 1) creditors.shift();
+      if (debtor.priceToGet >= -1) debtors.shift();
+    }
+    return settlements;
+  };
 
-  // ★ organizer をメンバーリストの最初に追加（重複しないように）
+  const computeSettlements = () => {
+    if (!eventData.transactions || eventData.transactions.length === 0) return [];
+    // displayedMembers に organizer を含めたメンバーリストを利用する
+    const balances = calculateBalances(eventData.transactions, displayedMembers);
+    const settlements = calculateSettlementsLocal(balances);
+    return settlements;
+  };
+
+  // ────────────────────────────────
+  // 表示用のメンバーリスト（organizer を先頭に追加）
+  // ────────────────────────────────
   const displayedMembers = [...eventData.members];
   if (
     eventData.organizer &&
     !displayedMembers.some((member) => member.name === eventData.organizer)
   ) {
     displayedMembers.unshift({
-      id: 'organizer', // 固有IDがなければ文字列でもOK
+      id: 'organizer',
       name: eventData.organizer,
       status: '参加',
     });
   }
 
-  const settlementResult = computeSettlement();
+  if (loading) return <div>読み込み中…</div>;
+  if (error) return <div>{error}</div>;
+  if (!eventData) return <div>イベントが見つかりません</div>;
+
+  const settlementsResult = computeSettlements();
 
   return (
     <div
@@ -487,11 +505,11 @@ export function InvitationViewPage() {
               <h3 className="text-center text-2xl font-semibold mb-6 text-purple-800">
                 清算結果
               </h3>
-              {settlementResult.settlements && settlementResult.settlements.length > 0 ? (
+              {settlementsResult && settlementsResult.length > 0 ? (
                 <ul className="space-y-4">
-                  {settlementResult.settlements.map((s, idx) => (
+                  {settlementsResult.map((s, idx) => (
                     <li key={idx} className="text-xl text-gray-700">
-                      {s.from} → {s.to} : ¥{s.amount}
+                      {s.payer} → {s.payee} : ¥{s.amount}
                     </li>
                   ))}
                 </ul>
