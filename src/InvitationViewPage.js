@@ -178,50 +178,22 @@ export function InvitationViewPage() {
     }
   };
 
-  // organizer を含めた全参加者リストを作成
-  const displayedMembers = [...(eventData?.members || [])];
-  if (
-    eventData?.organizer &&
-    !displayedMembers.some((member) => member.name === eventData.organizer)
-  ) {
-    displayedMembers.unshift({
-      id: 'organizer', // 固有IDがなければ文字列でもOK
-      name: eventData.organizer,
-      status: '参加',
-    });
-  }
-
-  // displayedMembers を対象とした精算計算関数
+  // 清算計算（ローカル計算）
   const computeSettlement = () => {
     const netBalances = {};
-
-    // displayedMembers を使って、organizer も含む全員の初期残高を設定
-    displayedMembers.forEach((member) => {
+    eventData.members.forEach((member) => {
       netBalances[member.name] = 0;
     });
-
-    // 各取引を処理
     eventData.transactions.forEach((tx) => {
       const share = tx.amount / tx.beneficiaries.length;
       tx.beneficiaries.forEach((beneficiary) => {
-        if (netBalances.hasOwnProperty(beneficiary)) {
-          netBalances[beneficiary] -= share;
-        } else {
-          netBalances[beneficiary] = -share;
-        }
+        netBalances[beneficiary] -= share;
       });
-      if (netBalances.hasOwnProperty(tx.payer)) {
-        netBalances[tx.payer] += tx.amount;
-      } else {
-        netBalances[tx.payer] = tx.amount;
-      }
+      netBalances[tx.payer] += tx.amount;
     });
-
-    // 小数点以下を丸める（必要に応じて調整してください）
     Object.keys(netBalances).forEach((name) => {
       netBalances[name] = Math.round(netBalances[name]);
     });
-
     const settlements = [];
     let creditors = [];
     let debtors = [];
@@ -233,10 +205,8 @@ export function InvitationViewPage() {
         debtors.push({ name, balance });
       }
     });
-
     creditors.sort((a, b) => b.balance - a.balance);
     debtors.sort((a, b) => a.balance - b.balance);
-
     let i = 0,
       j = 0;
     while (i < debtors.length && j < creditors.length) {
@@ -251,16 +221,27 @@ export function InvitationViewPage() {
       if (debtor.balance === 0) i++;
       if (creditor.balance === 0) j++;
     }
-
     return { netBalances, settlements };
   };
-
-  // 精算結果（「精算を計算する！」ボタン押下時に利用）
-  const settlementResult = computeSettlement();
 
   if (loading) return <div>読み込み中…</div>;
   if (error) return <div>{error}</div>;
   if (!eventData) return <div>イベントが見つかりません</div>;
+
+  // ★ organizer をメンバーリストの最初に追加（重複しないように）
+  const displayedMembers = [...eventData.members];
+  if (
+    eventData.organizer &&
+    !displayedMembers.some((member) => member.name === eventData.organizer)
+  ) {
+    displayedMembers.unshift({
+      id: 'organizer', // 固有IDがなければ文字列でもOK
+      name: eventData.organizer,
+      status: '参加',
+    });
+  }
+
+  const settlementResult = computeSettlement();
 
   return (
     <div
