@@ -1,3 +1,4 @@
+// App.js
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { HomePage } from './HomePage';
@@ -10,7 +11,8 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/create" element={<InvitationCreationPage />} />
-        <Route path="/view" element={<InvitationViewPage />} />
+        {/* パラメータ名を :id に変更 */}
+        <Route path="/view/:id" element={<InvitationViewPage />} />
       </Routes>
     </BrowserRouter>
   );

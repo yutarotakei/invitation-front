@@ -4,7 +4,8 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 
 export function InvitationViewPage() {
-  const { eventId } = useParams(); // URL例: /invitation/<eventId>
+  // URL例: /view/:id となっているので、id を受け取る
+  const { id } = useParams();
   const navigate = useNavigate();
 
   const [eventData, setEventData] = useState(null);
@@ -34,7 +35,7 @@ export function InvitationViewPage() {
     setLoading(true);
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_API_URL || ''}/api/events/${eventId}`
+        `${process.env.REACT_APP_API_URL || ''}/api/events/${id}`
       );
       if (!response.ok) {
         throw new Error('イベント情報の取得に失敗しました');
@@ -55,7 +56,7 @@ export function InvitationViewPage() {
   useEffect(() => {
     fetchEvent();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [eventId]);
+  }, [id]);
 
   // メンバー追加処理
   const handleAddMember = async () => {
@@ -65,7 +66,7 @@ export function InvitationViewPage() {
     }
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_API_URL || ''}/api/events/${eventId}/members`,
+        `${process.env.REACT_APP_API_URL || ''}/api/events/${id}/members`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -89,7 +90,7 @@ export function InvitationViewPage() {
   const handleUpdateMemberStatus = async (memberId, newStatus) => {
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_API_URL || ''}/api/events/${eventId}/members/${memberId}`,
+        `${process.env.REACT_APP_API_URL || ''}/api/events/${id}/members/${memberId}`,
         {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
@@ -131,7 +132,7 @@ export function InvitationViewPage() {
     }
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_API_URL || ''}/api/events/${eventId}/transactions`,
+        `${process.env.REACT_APP_API_URL || ''}/api/events/${id}/transactions`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -161,7 +162,7 @@ export function InvitationViewPage() {
   const handleDeleteTransaction = async (transactionId) => {
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_API_URL || ''}/api/events/${eventId}/transactions/${transactionId}`,
+        `${process.env.REACT_APP_API_URL || ''}/api/events/${id}/transactions/${transactionId}`,
         {
           method: 'DELETE',
         }
