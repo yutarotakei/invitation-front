@@ -126,7 +126,7 @@ function DateBlock({ eventDate, setEventDate, eventTime, setEventTime, allDay, s
 // 入力欄は中央揃え
 function LocationBlock({ location, setLocation, meetingMemo, setMeetingMemo }) {
   const mapQuery =
-    location.trim() !== '' ? encodeURIComponent(location) : encodeURIComponent('東京都新宿区');
+    location.trim() !== '' ? encodeURIComponent(location) : encodeURIComponent('東京駅');
   return (
     <ModernCard className="text-center">
       <h2 className="text-3xl font-bold text-purple-800 mb-4">場所</h2>
