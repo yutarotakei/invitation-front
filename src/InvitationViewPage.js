@@ -228,6 +228,19 @@ export function InvitationViewPage() {
   if (error) return <div>{error}</div>;
   if (!eventData) return <div>イベントが見つかりません</div>;
 
+  // ★ organizer をメンバーリストの最初に追加（重複しないように）
+  const displayedMembers = [...eventData.members];
+  if (
+    eventData.organizer &&
+    !displayedMembers.some((member) => member.name === eventData.organizer)
+  ) {
+    displayedMembers.unshift({
+      id: 'organizer', // 固有IDがなければ文字列でもOK
+      name: eventData.organizer,
+      status: '参加',
+    });
+  }
+
   const settlementResult = computeSettlement();
 
   return (
@@ -275,7 +288,7 @@ export function InvitationViewPage() {
             </button>
           </div>
           <div className="grid grid-cols-2 gap-6">
-            {eventData.members.map((member) => (
+            {displayedMembers.map((member) => (
               <div
                 key={member.id}
                 className="flex items-center justify-between p-4 bg-gray-50 rounded-lg shadow hover:shadow-xl transition"
@@ -376,7 +389,7 @@ export function InvitationViewPage() {
                   onChange={(e) => setNewTransPayer(e.target.value)}
                   className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:border-indigo-500 transition"
                 >
-                  {eventData.members.map((member) => (
+                  {displayedMembers.map((member) => (
                     <option key={member.id} value={member.name}>
                       {member.name}
                     </option>
@@ -387,7 +400,7 @@ export function InvitationViewPage() {
             <div className="flex flex-col space-y-2">
               <label className="text-lg text-gray-700">誰の分の</label>
               <div className="flex flex-wrap gap-3">
-                {eventData.members.map((member) => (
+                {displayedMembers.map((member) => (
                   <label
                     key={member.id}
                     className="inline-flex items-center space-x-2 border border-gray-300 rounded-full px-4 py-2 cursor-pointer hover:bg-gray-100 transition"
