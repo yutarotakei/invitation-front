@@ -178,7 +178,6 @@ export function InvitationViewPage() {
     }
   };
 
-
   // organizer を含めた全参加者リストを作成
   const displayedMembers = [...(eventData?.members || [])];
   if (
@@ -267,7 +266,6 @@ export function InvitationViewPage() {
   if (error) return <div>{error}</div>;
   if (!eventData) return <div>イベントが見つかりません</div>;
 
-
   return (
     <div
       className="min-h-screen bg-gradient-to-br from-purple-100 via-pink-100 to-yellow-100 p-8 sm:p-12"
@@ -312,43 +310,37 @@ export function InvitationViewPage() {
               メンバーを追加
             </button>
           </div>
-          <div className="grid grid-cols-1 gap-6">
+          {/* グリッド表示：モバイルの場合、1行2列表示 */}
+          <div className="grid grid-cols-2 gap-4">
             {displayedMembers.map((member) => (
               <div
                 key={member.id}
-                className="flex items-center justify-between p-4 bg-gray-50 rounded-lg shadow hover:shadow-xl transition"
+                onClick={() => {
+                  setEditingMember(member);
+                  setIsEditMemberDialogOpen(true);
+                }}
+                className="flex flex-col items-center p-3 bg-gray-50 rounded-lg shadow hover:shadow-xl transition cursor-pointer"
               >
-                <div className="flex items-center space-x-4">
-                  {/* アバター部分：グラデーション背景 */}
-                  <div className="w-12 h-12 rounded-full bg-gradient-to-r from-indigo-400 to-indigo-700 flex items-center justify-center text-white text-2xl font-bold">
-                    {member.name.charAt(0)}
-                  </div>
-                  <div>
-                    <p className="text-xl font-medium text-gray-900">
-                      {member.name}
-                    </p>
-                    <p
-                      className={`text-sm font-semibold ${
-                        member.status === '参加'
-                          ? 'text-green-600'
-                          : member.status === '不参加'
-                          ? 'text-red-600'
-                          : 'text-yellow-600'
-                      }`}
-                    >
-                      {member.status}
-                    </p>
-                  </div>
+                {/* アバター部分：グラデーション背景 */}
+                <div className="w-10 h-10 rounded-full bg-gradient-to-r from-indigo-400 to-indigo-700 flex items-center justify-center text-white text-xl font-bold">
+                  {member.name.charAt(0)}
                 </div>
-                <button
-                  onClick={() => {
-                    setEditingMember(member);
-                    setIsEditMemberDialogOpen(true);
-                  }}
-                  className="text-gray-500 hover:text-gray-700"
-                >
-                  Edit
-                </button>
+                <div className="mt-2 text-center">
+                  <p className="text-base font-medium text-gray-900">
+                    {member.name}
+                  </p>
+                  <p
+                    className={`text-xs font-semibold ${
+                      member.status === '参加'
+                        ? 'text-green-600'
+                        : member.status === '不参加'
+                        ? 'text-red-600'
+                        : 'text-yellow-600'
+                    }`}
+                  >
+                    {member.status}
+                  </p>
+                </div>
               </div>
             ))}
           </div>
@@ -424,19 +416,19 @@ export function InvitationViewPage() {
             </div>
             <div className="flex flex-col space-y-2">
               <label className="text-lg text-gray-700">誰の分の</label>
-              <div className="flex flex-wrap gap-3">
+              <div className="flex flex-wrap gap-2">
                 {displayedMembers.map((member) => (
                   <label
                     key={member.id}
-                    className="inline-flex items-center space-x-2 border border-gray-300 rounded-full px-4 py-2 cursor-pointer hover:bg-gray-100 transition"
+                    className="inline-flex items-center space-x-1 border border-gray-300 rounded-full px-2 py-1 cursor-pointer hover:bg-gray-100 transition"
                   >
                     <input
                       type="checkbox"
-                      className="form-checkbox h-5 w-5 text-indigo-600"
+                      className="form-checkbox h-4 w-4 text-indigo-600"
                       checked={newTransBeneficiaries.includes(member.name)}
                       onChange={() => toggleBeneficiary(member.name)}
                     />
-                    <span className="text-lg">{member.name}</span>
+                    <span className="text-sm">{member.name}</span>
                   </label>
                 ))}
               </div>
@@ -473,8 +465,9 @@ export function InvitationViewPage() {
                       <p className="text-xl font-medium text-gray-700">
                         {tx.description}
                       </p>
+                      {/* 修正: 「支払者 → 対象者, …」のみ表示 */}
                       <p className="text-base text-gray-500">
-                        支払者: {tx.payer}　対象: {tx.beneficiaries.join(', ')}
+                        {tx.payer} → {tx.beneficiaries.join(', ')}
                       </p>
                     </div>
                     <div className="flex items-center space-x-4">
@@ -494,12 +487,12 @@ export function InvitationViewPage() {
             </div>
           )}
 
-          {/* 精算計算ボタン */}
+          {/* 精算計算ボタン：グラデーション変更 */}
           {eventData.transactions && eventData.transactions.length >= 2 && (
             <div className="flex justify-center">
               <button
                 onClick={() => setShowSettlement(true)}
-                className="mt-6 bg-gradient-to-r from-indigo-500 to-blue-500 text-white px-8 py-4 rounded-full text-2xl hover:opacity-90 transition"
+                className="mt-6 bg-gradient-to-r from-purple-500 to-pink-600 text-white px-8 py-4 rounded-full text-2xl hover:opacity-90 transition"
               >
                 精算を計算する！
               </button>
