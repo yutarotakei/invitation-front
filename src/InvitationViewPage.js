@@ -287,7 +287,7 @@ export function InvitationViewPage() {
               メンバーを追加
             </button>
           </div>
-          <div className="grid grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 gap-6">
             {displayedMembers.map((member) => (
               <div
                 key={member.id}
