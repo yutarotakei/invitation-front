@@ -56,13 +56,22 @@ function TitleBlock({ title, setTitle, organizer, setOrganizer }) {
   );
 }
 
+// ヘルパー関数: YYYY-MM-DD を "M月D日" に変換
+function formatDateJP(dateStr) {
+  if (!dateStr) return '';
+  const [year, month, day] = dateStr.split('-');
+  return `${parseInt(month, 10)}月${parseInt(day, 10)}日`;
+}
+
 // DateBlock: 日付入力（イベント日、時間、終日チェック）
 // 入力欄は中央揃え
 function DateBlock({ eventDate, setEventDate, eventTime, setEventTime, allDay, setAllDay }) {
   return (
     <ModernCard className="text-center">
       <h2 className="text-3xl font-bold text-purple-800 mb-4">日付</h2>
-      <div className="mb-6">
+      
+      {/* 日付入力（オーバーレイで "-年-月-日" を表示） */}
+      <div className="mb-6 relative">
         <input 
           type="date"
           value={eventDate}
@@ -70,16 +79,34 @@ function DateBlock({ eventDate, setEventDate, eventTime, setEventTime, allDay, s
           required
           className="mx-auto border border-purple-300 rounded-full py-3 px-4 bg-white focus:outline-none focus:ring-2 focus:ring-purple-400 text-center transition"
         />
+        {!eventDate && (
+          <span className="absolute inset-0 flex items-center justify-center pointer-events-none text-gray-400">
+            -年-月-日
+          </span>
+        )}
       </div>
+      
+      {/* 時間入力＋終日チェック */}
       <div className="mb-6 flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6">
-        <input 
-          type="time"
-          value={eventTime}
-          onChange={(e) => setEventTime(e.target.value)}
-          disabled={allDay}
-          required={!allDay}
-          className={`border border-purple-300 rounded-full py-3 px-4 bg-white focus:outline-none focus:ring-2 focus:ring-purple-400 text-center transition ${allDay ? 'opacity-50 cursor-not-allowed' : ''}`}
-        />
+        <div className="relative w-full">
+          <input 
+            type="time"
+            value={eventTime}
+            onChange={(e) => setEventTime(e.target.value)}
+            disabled={allDay}
+            required={!allDay}
+            className={`w-full border border-purple-300 rounded-full py-3 px-4 text-center transition ${
+              allDay
+                ? 'bg-gray-200 text-gray-500 cursor-not-allowed'
+                : 'bg-white focus:outline-none focus:ring-2 focus:ring-purple-400'
+            }`}
+          />
+          {!eventTime && (
+            <span className="absolute inset-0 flex items-center justify-center pointer-events-none text-gray-400">
+              :
+            </span>
+          )}
+        </div>
         <div className="flex items-center justify-center">
           <input 
             type="checkbox"
@@ -145,8 +172,8 @@ function LocationBlock({ location, setLocation, meetingMemo, setMeetingMemo }) {
 // Confirmation: 入力内容の確認
 function Confirmation({ data, onEdit, onConfirm }) {
   const finalDate = data.allDay
-    ? `${data.eventDate} (終日)`
-    : `${data.eventDate} ${data.eventTime}`;
+    ? `${formatDateJP(data.eventDate)} (終日)`
+    : `${formatDateJP(data.eventDate)} ${data.eventTime}`;
   return (
     <motion.div 
       initial={{ opacity: 0, y: 20 }}
