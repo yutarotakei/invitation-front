@@ -146,15 +146,15 @@ function LocationBlock({ location, setLocation, meetingMemo, setMeetingMemo }) {
         </div>
       </div>
       <div className="w-full aspect-square rounded-xl overflow-hidden mb-4 shadow-md">
-        <iframe
-          width="100%"
-          height="100%"
-          frameBorder="0"
-          style={{ border: 0 }}
-          src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyBFtHIML9rRnOnQ-BYX9RIQLa3vHiCBXYw&q=${mapQuery}`}
-          allowFullScreen
-          title="Google Map"
-        ></iframe>
+      <iframe
+  width="100%"
+  height="100%"
+  frameBorder="0"
+  style={{ border: 0 }}
+  src={`https://www.google.com/maps/embed/v1/place?key=${process.env.REACT_APP_GOOGLE_MAPS_API_KEY}&q=${mapQuery}`}
+  allowFullScreen
+  title="Google Map"
+></iframe>
       </div>
       <div className="mb-2">
         <input 
