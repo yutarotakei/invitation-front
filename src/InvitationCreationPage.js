@@ -146,15 +146,15 @@ function LocationBlock({ location, setLocation, meetingMemo, setMeetingMemo }) {
         </div>
       </div>
       <div className="w-full aspect-square rounded-xl overflow-hidden mb-4 shadow-md">
-      <iframe
-  width="100%"
-  height="100%"
-  frameBorder="0"
-  style={{ border: 0 }}
-  src={`https://www.google.com/maps/embed/v1/place?key=${process.env.REACT_APP_GOOGLE_MAPS_API_KEY}&q=${mapQuery}`}
-  allowFullScreen
-  title="Google Map"
-></iframe>
+        <iframe
+          width="100%"
+          height="100%"
+          frameBorder="0"
+          style={{ border: 0 }}
+          src={`https://www.google.com/maps/embed/v1/place?key=${process.env.REACT_APP_GOOGLE_MAPS_API_KEY}&q=${mapQuery}`}
+          allowFullScreen
+          title="Google Map"
+        ></iframe>
       </div>
       <div className="mb-2">
         <input 
@@ -223,6 +223,45 @@ function Confirmation({ data, onEdit, onConfirm }) {
   );
 }
 
+// 新規追加: SharePopupコンポーネント
+function SharePopup({ link, onNext, onClose }) {
+  return (
+    <motion.div 
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
+    >
+      <div className="bg-white rounded-2xl shadow-xl p-8 max-w-md w-full text-center">
+        <h2 className="text-3xl font-bold text-purple-800 mb-6">リンクを共有しよう！</h2>
+        <div className="mb-6">
+          <input 
+            type="text"
+            readOnly
+            value={link}
+            className="w-full border border-purple-300 rounded-full py-3 px-4 bg-white text-center focus:outline-none"
+            onClick={(e) => e.target.select()}
+          />
+        </div>
+        <div className="flex justify-center space-x-4">
+          <button 
+            onClick={onClose}
+            className="px-6 py-3 bg-gray-200 text-gray-800 rounded-full hover:bg-gray-300 transition"
+          >
+            キャンセル
+          </button>
+          <button 
+            onClick={onNext}
+            className="px-6 py-3 bg-gradient-to-r from-teal-400 to-blue-500 text-white rounded-full hover:opacity-90 transition"
+          >
+            次へ
+          </button>
+        </div>
+      </div>
+    </motion.div>
+  );
+}
+
 // InvitationCreationPage: イベント作成フォーム
 export function InvitationCreationPage() {
   const navigate = useNavigate();
@@ -236,6 +275,9 @@ export function InvitationCreationPage() {
     meetingMemo: '',
   });
   const [confirmMode, setConfirmMode] = useState(false);
+  // 新規追加: 共有ポップアップ表示の状態とリンク
+  const [showSharePopup, setShowSharePopup] = useState(false);
+  const [shareLink, setShareLink] = useState('');
 
   const handleSubmit = () => {
     // 必須項目チェック：タイトル、幹事、日付、（終日でなければ時間）、場所
@@ -252,7 +294,7 @@ export function InvitationCreationPage() {
     setConfirmMode(true);
   };
 
-  // バックエンドにイベント作成リクエストを送信
+  // 変更: バックエンドにイベント作成リクエストを送信後、ポップアップ表示
   const handleConfirm = async () => {
     try {
       const response = await fetch(
@@ -267,8 +309,10 @@ export function InvitationCreationPage() {
         throw new Error('イベント作成に失敗しました');
       }
       const result = await response.json();
-      // 作成成功後、取得したイベントIDの固有リンクへ遷移
-      navigate(`/view/${result.eventId}`);
+      // 共有リンクの生成例: 現在のホスト名を使い /view/<eventId> へ
+      const newShareLink = `${window.location.origin}/view/${result.eventId}`;
+      setShareLink(newShareLink);
+      setShowSharePopup(true);
     } catch (error) {
       console.error(error);
       alert('イベント作成に失敗しました');
@@ -277,6 +321,12 @@ export function InvitationCreationPage() {
 
   const handleEdit = () => {
     setConfirmMode(false);
+  };
+
+  // ポップアップ内「次へ」ボタンで実際に遷移
+  const handleNext = () => {
+    setShowSharePopup(false);
+    navigate(shareLink.replace(window.location.origin, ''));
   };
 
   return (
@@ -318,6 +368,14 @@ export function InvitationCreationPage() {
           <Confirmation data={data} onEdit={handleEdit} onConfirm={handleConfirm} />
         )}
       </div>
+      {/* 共有用ポップアップの表示 */}
+      {showSharePopup && (
+        <SharePopup 
+          link={shareLink} 
+          onNext={handleNext} 
+          onClose={() => setShowSharePopup(false)}
+        />
+      )}
     </div>
   );
 }
