@@ -370,9 +370,9 @@ export function InvitationViewPage() {
         </div>
       </div>
       
-      {/* 名前部分 - 最適化された表示 */}
-      <div className="flex-1 w-full pl-2.5">
-        <p className="font-medium text-base tracking-wide text-gray-800">
+      {/* 名前部分 - 1行表示、折り返しなし */}
+      <div className="flex-1 pl-2.5 overflow-hidden">
+        <p className="font-medium text-base tracking-wide text-gray-800 whitespace-nowrap overflow-hidden truncate">
           {member.name.length > 5 
             ? `${member.name.slice(0, 5)}...` 
             : member.name}
@@ -381,6 +381,7 @@ export function InvitationViewPage() {
     </div>
   </div>
 ))}
+
           </div>
         </div>
 
