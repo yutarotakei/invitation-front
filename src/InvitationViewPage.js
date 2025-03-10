@@ -178,7 +178,6 @@ export function InvitationViewPage() {
     }
   };
 
-  // organizer を含めた全参加者リストを作成
   const displayedMembers = [...(eventData?.members || [])];
   if (
     eventData?.organizer &&
@@ -190,6 +189,17 @@ export function InvitationViewPage() {
       status: '参加',
     });
   }
+  
+  // メンバーをステータスによってソート
+  const sortedMembers = [...displayedMembers].sort((a, b) => {
+    // 主催者は常に最初
+    if (a.id === 'organizer') return -1;
+    if (b.id === 'organizer') return 1;
+    
+    // それ以外はステータス順
+    const statusOrder = { '参加': 1, '不参加': 2, '未定': 3 };
+    return statusOrder[a.status] - statusOrder[b.status];
+  });
 
   const computeSettlement = () => {
     if (!eventData || !eventData.transactions) {
@@ -325,36 +335,39 @@ export function InvitationViewPage() {
           </div>
           {/* グリッド表示：モバイルの場合、1行2列表示 */}
           <div className="grid grid-cols-2 gap-4">
-          {displayedMembers.map((member) => (
+          {sortedMembers.map((member) => (
   <div
     key={member.id}
     onClick={() => {
       setEditingMember(member);
       setIsEditMemberDialogOpen(true);
     }}
-    className="flex items-center p-2 rounded-lg cursor-pointer transition-all hover:bg-gray-50"
+    className="rounded-lg cursor-pointer transition-all hover:shadow-md"
   >
-    {/* アバター部分：ステータスを分離したリングで表示 */}
-    <div className="relative flex-shrink-0 mr-1">
-      {/* ステータスリング - 標準のborder-4を使用 */}
-      <div className={`absolute inset-0 w-12 h-12 rounded-full -m-1
-        ${member.status === '参加'
-          ? 'border-4 border-green-400'
-          : member.status === '不参加'
-          ? 'border-4 border-red-400'
-          : 'border-4 border-yellow-400'
-        }`}
-      ></div>
-      {/* アバター自体 - 文字を大きく太く */}
-      <div className="w-10 h-10 rounded-full bg-gradient-to-r from-indigo-400 to-indigo-600 flex items-center justify-center text-white relative z-10">
-        <span className="text-lg font-bold">{member.name.charAt(0)}</span>
+    {/* 全体をカード化 */}
+    <div className="flex items-center bg-gray-50 rounded-xl shadow-sm px-3 py-2 border border-gray-100">
+      {/* アバター部分：ステータスを分離したリングで表示 */}
+      <div className="relative flex-shrink-0">
+        {/* ステータスリング */}
+        <div className={`absolute inset-0 w-12 h-12 rounded-full -m-1
+          ${member.status === '参加'
+            ? 'border-4 border-green-400'
+            : member.status === '不参加'
+            ? 'border-4 border-red-400'
+            : 'border-4 border-yellow-400'
+          }`}
+        ></div>
+        {/* アバター自体 */}
+        <div className="w-10 h-10 rounded-full bg-gradient-to-r from-indigo-400 to-indigo-600 flex items-center justify-center text-white relative z-10">
+          <span className="text-lg font-bold">{member.name.charAt(0)}</span>
+        </div>
       </div>
-    </div>
-    {/* 名前部分：左寄りにしてスペースを確保、余分なパディングを削減 */}
-    <div className="flex-1 min-w-0 pl-1" style={{ minWidth: '100px' }}>
-      <p className="text-base font-normal text-gray-700 truncate bg-gray-50 px-2 py-1.5 rounded-lg">
-        {member.name}
-      </p>
+      {/* 名前部分 */}
+      <div className="flex-1 min-w-0 pl-3">
+        <p className="text-base font-normal text-gray-700 truncate">
+          {member.name}
+        </p>
+      </div>
     </div>
   </div>
 ))}
