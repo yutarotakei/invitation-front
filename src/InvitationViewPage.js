@@ -335,14 +335,14 @@ export function InvitationViewPage() {
     className="flex items-center p-2 rounded-lg cursor-pointer transition-all hover:bg-gray-50"
   >
     {/* アバター部分：ステータスを分離したリングで表示 */}
-    <div className="relative flex-shrink-0 mr-3">
-      {/* ステータスリング - 太くして目立つように */}
+    <div className="relative flex-shrink-0 mr-1">
+      {/* ステータスリング - 標準のborder-4を使用 */}
       <div className={`absolute inset-0 w-12 h-12 rounded-full -m-1
         ${member.status === '参加'
-          ? 'border-3 border-green-400'
+          ? 'border-4 border-green-400'
           : member.status === '不参加'
-          ? 'border-3 border-red-400'
-          : 'border-3 border-yellow-400'
+          ? 'border-4 border-red-400'
+          : 'border-4 border-yellow-400'
         }`}
       ></div>
       {/* アバター自体 - 文字を大きく太く */}
@@ -350,9 +350,9 @@ export function InvitationViewPage() {
         <span className="text-lg font-bold">{member.name.charAt(0)}</span>
       </div>
     </div>
-    {/* 名前部分：5文字以上表示できるように幅を確保 */}
-    <div className="flex-1 min-w-0" style={{ minWidth: '90px' }}>
-      <p className="text-base font-normal text-gray-700 truncate bg-gray-50 px-3 py-1.5 rounded-lg">
+    {/* 名前部分：左寄りにしてスペースを確保、余分なパディングを削減 */}
+    <div className="flex-1 min-w-0 pl-1" style={{ minWidth: '100px' }}>
+      <p className="text-base font-normal text-gray-700 truncate bg-gray-50 px-2 py-1.5 rounded-lg">
         {member.name}
       </p>
     </div>
