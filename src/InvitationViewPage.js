@@ -325,40 +325,40 @@ export function InvitationViewPage() {
           </div>
           {/* グリッド表示：モバイルの場合、1行2列表示 */}
           <div className="grid grid-cols-2 gap-4">
-            {displayedMembers.map((member) => (
-              <div
-                key={member.id}
-                onClick={() => {
-                  setEditingMember(member);
-                  setIsEditMemberDialogOpen(true);
-                }}
-                className="flex items-center p-2 rounded-lg cursor-pointer transition-all hover:bg-gray-50"
-              >
-                {/* アバター部分：ステータスを円の枠線で表現 */}
-                <div className={`relative flex-shrink-0 mr-2`}>
-                  <div className={`w-9 h-9 rounded-full 
-                    ${member.status === '参加'
-                      ? 'border-3 border-green-400 shadow-[0_0_0_2px_rgba(74,222,128,0.5)]'
-                      : member.status === '不参加'
-                      ? 'border-3 border-red-400 shadow-[0_0_0_2px_rgba(248,113,113,0.5)]'
-                      : 'border-3 border-yellow-400 shadow-[0_0_0_2px_rgba(250,204,21,0.5)]'
-                    } p-0.5`}
-                  >
-                    <div className="w-full h-full rounded-full bg-gradient-to-r from-indigo-400 to-indigo-700 flex items-center justify-center text-white text-sm font-bold">
-                      {member.name.charAt(0)}
-                    </div>
-                  </div>
-                </div>
-                {/* 名前部分 */}
-                <div className="flex-1 min-w-0">
-                  <p className="text-base font-normal text-gray-700 truncate bg-gray-50 px-3 py-1.5 rounded-md">
-                    {member.name.length > 4 
-                      ? `${member.name.slice(0, 4)}...` 
-                      : member.name}
-                  </p>
-                </div>
-              </div>
-            ))}
+          {displayedMembers.map((member) => (
+  <div
+    key={member.id}
+    onClick={() => {
+      setEditingMember(member);
+      setIsEditMemberDialogOpen(true);
+    }}
+    className="flex items-center p-2 rounded-lg cursor-pointer transition-all hover:bg-gray-50"
+  >
+    {/* アバター部分：ステータスを円の枠線で表現 - より目立つ色と太い枠線に変更 */}
+    <div className={`relative flex-shrink-0 mr-2`}>
+      <div className={`w-9 h-9 rounded-full 
+        ${member.status === '参加'
+          ? 'border-4 border-green-500 shadow-[0_0_0_3px_rgba(74,222,128,0.7)]'
+          : member.status === '不参加'
+          ? 'border-4 border-red-500 shadow-[0_0_0_3px_rgba(248,113,113,0.7)]'
+          : 'border-4 border-yellow-500 shadow-[0_0_0_3px_rgba(250,204,21,0.7)]'
+        } p-0.5`}
+      >
+        <div className="w-full h-full rounded-full bg-gradient-to-r from-indigo-400 to-indigo-700 flex items-center justify-center text-white text-sm font-bold">
+          {member.name.charAt(0)}
+        </div>
+      </div>
+    </div>
+    {/* 名前部分：5文字まで表示するように変更 */}
+    <div className="flex-1 min-w-0">
+      <p className="text-base font-normal text-gray-700 truncate bg-gray-50 px-3 py-1.5 rounded-md">
+        {member.name.length > 5 
+          ? `${member.name.slice(0, 5)}...` 
+          : member.name}
+      </p>
+    </div>
+  </div>
+))}
           </div>
         </div>
 
