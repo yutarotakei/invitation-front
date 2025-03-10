@@ -332,18 +332,24 @@ export function InvitationViewPage() {
                   setEditingMember(member);
                   setIsEditMemberDialogOpen(true);
                 }}
-                className={`flex items-center p-2 rounded-lg cursor-pointer transition-all hover:shadow-md ${
-                  member.status === '参加'
-                    ? 'border-2 border-green-500'
-                    : member.status === '不参加'
-                    ? 'border-2 border-red-500'
-                    : 'border-2 border-yellow-500'
-                }`}
+                className="flex items-center p-2 rounded-lg cursor-pointer transition-all hover:bg-gray-50"
               >
-                {/* アバター部分とテキスト部分を横並びに */}
-                <div className="w-8 h-8 rounded-full bg-gradient-to-r from-indigo-400 to-indigo-700 flex items-center justify-center text-white text-sm font-bold mr-2">
-                  {member.name.charAt(0)}
+                {/* アバター部分：ステータスを円の枠線で表現 */}
+                <div className={`relative flex-shrink-0 mr-2`}>
+                  <div className={`w-9 h-9 rounded-full 
+                    ${member.status === '参加'
+                      ? 'border-2 border-green-500'
+                      : member.status === '不参加'
+                      ? 'border-2 border-red-500'
+                      : 'border-2 border-yellow-500'
+                    } p-0.5`}
+                  >
+                    <div className="w-full h-full rounded-full bg-gradient-to-r from-indigo-400 to-indigo-700 flex items-center justify-center text-white text-sm font-bold">
+                      {member.name.charAt(0)}
+                    </div>
+                  </div>
                 </div>
+                {/* 名前部分 */}
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-gray-900 truncate">
                     {member.name.length > 4 
