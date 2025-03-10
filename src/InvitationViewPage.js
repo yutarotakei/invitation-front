@@ -332,26 +332,23 @@ export function InvitationViewPage() {
                   setEditingMember(member);
                   setIsEditMemberDialogOpen(true);
                 }}
-                className="flex flex-col items-center p-3 bg-gray-50 rounded-lg shadow hover:shadow-xl transition cursor-pointer"
+                className={`flex items-center p-2 rounded-lg cursor-pointer transition-all hover:shadow-md ${
+                  member.status === '参加'
+                    ? 'border-2 border-green-500'
+                    : member.status === '不参加'
+                    ? 'border-2 border-red-500'
+                    : 'border-2 border-yellow-500'
+                }`}
               >
-                {/* アバター部分：グラデーション背景 */}
-                <div className="w-10 h-10 rounded-full bg-gradient-to-r from-indigo-400 to-indigo-700 flex items-center justify-center text-white text-xl font-bold">
+                {/* アバター部分とテキスト部分を横並びに */}
+                <div className="w-8 h-8 rounded-full bg-gradient-to-r from-indigo-400 to-indigo-700 flex items-center justify-center text-white text-sm font-bold mr-2">
                   {member.name.charAt(0)}
                 </div>
-                <div className="mt-2 text-center">
-                  <p className="text-base font-medium text-gray-900">
-                    {member.name}
-                  </p>
-                  <p
-                    className={`text-xs font-semibold ${
-                      member.status === '参加'
-                        ? 'text-green-600'
-                        : member.status === '不参加'
-                        ? 'text-red-600'
-                        : 'text-yellow-600'
-                    }`}
-                  >
-                    {member.status}
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium text-gray-900 truncate">
+                    {member.name.length > 4 
+                      ? `${member.name.slice(0, 4)}...` 
+                      : member.name}
                   </p>
                 </div>
               </div>
