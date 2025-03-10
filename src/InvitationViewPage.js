@@ -334,27 +334,26 @@ export function InvitationViewPage() {
     }}
     className="flex items-center p-2 rounded-lg cursor-pointer transition-all hover:bg-gray-50"
   >
-    {/* アバター部分：シンプルでアップルライクなステータス表示 */}
-    <div className={`relative flex-shrink-0 mr-3`}>
-      <div className={`w-10 h-10 rounded-full 
+    {/* アバター部分：ステータスを分離したリングで表示 */}
+    <div className="relative flex-shrink-0 mr-3">
+      {/* ステータスリング - アバターより大きく設定して間隔を作る */}
+      <div className={`absolute inset-0 w-12 h-12 rounded-full -m-1
         ${member.status === '参加'
-          ? 'ring-2 ring-green-400 shadow-sm'
+          ? 'border-2 border-green-400'
           : member.status === '不参加'
-          ? 'ring-2 ring-red-400 shadow-sm'
-          : 'ring-2 ring-yellow-400 shadow-sm'
+          ? 'border-2 border-red-400'
+          : 'border-2 border-yellow-400'
         }`}
-      >
-        <div className="w-full h-full rounded-full bg-gradient-to-r from-indigo-400 to-indigo-600 flex items-center justify-center text-white text-sm font-medium">
-          {member.name.charAt(0)}
-        </div>
+      ></div>
+      {/* アバター自体 */}
+      <div className="w-10 h-10 rounded-full bg-gradient-to-r from-indigo-400 to-indigo-600 flex items-center justify-center text-white text-sm font-medium relative z-10">
+        {member.name.charAt(0)}
       </div>
     </div>
-    {/* 名前部分：表示文字数を増やす */}
-    <div className="flex-1 min-w-0">
-      <p className="text-base font-normal text-gray-700 truncate bg-gray-50 px-3 py-1.5 rounded-lg">
-        {member.name.length > 10 
-          ? `${member.name.slice(0, 10)}...` 
-          : member.name}
+    {/* 名前部分：モバイル用に最適化 */}
+    <div className="flex-1 w-full min-w-0 max-w-full overflow-hidden">
+      <p className="text-base font-normal text-gray-700 bg-gray-50 px-3 py-1.5 rounded-lg whitespace-normal break-words line-clamp-1">
+        {member.name}
       </p>
     </div>
   </div>
