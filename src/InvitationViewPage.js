@@ -335,7 +335,7 @@ export function InvitationViewPage() {
           </div>
           {/* グリッド表示：モバイルの場合、1行2列表示 */}
           <div className="grid grid-cols-2 gap-4">
-          {sortedMembers.map((member) => (
+{sortedMembers.map((member) => (
   <div
     key={member.id}
     onClick={() => {
