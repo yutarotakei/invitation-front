@@ -344,27 +344,34 @@ export function InvitationViewPage() {
     }}
     className="rounded-lg cursor-pointer transition-all hover:shadow-md"
   >
-    {/* 全体をカード化 */}
-    <div className="flex items-center bg-gray-50 rounded-xl shadow-sm px-3 py-2 border border-gray-100">
+    {/* 洗練されたカードデザイン */}
+    <div className={`flex items-center rounded-xl shadow-sm px-3 py-2.5 border transition-all
+      ${member.status === '参加'
+        ? 'bg-gradient-to-r from-white to-green-50 border-green-100'
+        : member.status === '不参加'
+        ? 'bg-gradient-to-r from-white to-red-50 border-red-100'
+        : 'bg-gradient-to-r from-white to-yellow-50 border-yellow-100'
+      }`}
+    >
       {/* アバター部分：ステータスを分離したリングで表示 */}
       <div className="relative flex-shrink-0">
         {/* ステータスリング */}
         <div className={`absolute inset-0 w-12 h-12 rounded-full -m-1
           ${member.status === '参加'
-            ? 'border-4 border-green-400'
+            ? 'border-4 border-green-400 opacity-80'
             : member.status === '不参加'
-            ? 'border-4 border-red-400'
-            : 'border-4 border-yellow-400'
+            ? 'border-4 border-red-400 opacity-80'
+            : 'border-4 border-yellow-400 opacity-80'
           }`}
         ></div>
         {/* アバター自体 */}
-        <div className="w-10 h-10 rounded-full bg-gradient-to-r from-indigo-400 to-indigo-600 flex items-center justify-center text-white relative z-10">
+        <div className="w-10 h-10 rounded-full bg-gradient-to-r from-indigo-500 to-indigo-700 flex items-center justify-center text-white relative z-10 shadow-inner">
           <span className="text-lg font-bold">{member.name.charAt(0)}</span>
         </div>
       </div>
-      {/* 名前部分 */}
-      <div className="flex-1 min-w-0 pl-3">
-        <p className="text-base font-normal text-gray-700 truncate">
+      {/* 名前部分 - より洗練された表示 */}
+      <div className="flex-1 min-w-0 pl-3.5">
+        <p className="text-base font-medium text-gray-800 tracking-wide truncate">
           {member.name}
         </p>
       </div>
