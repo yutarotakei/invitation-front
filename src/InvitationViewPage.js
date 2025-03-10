@@ -335,7 +335,7 @@ export function InvitationViewPage() {
           </div>
           {/* グリッド表示：モバイルの場合、1行2列表示 */}
           <div className="grid grid-cols-2 gap-4">
-{sortedMembers.map((member) => (
+          {sortedMembers.map((member) => (
   <div
     key={member.id}
     onClick={() => {
@@ -344,7 +344,7 @@ export function InvitationViewPage() {
     }}
     className="transform transition-all duration-200 hover:scale-102 hover:-translate-y-1"
   >
-    {/* 完全に刷新されたカードデザイン */}
+    {/* 最適化されたカードデザイン */}
     <div className={`flex items-center rounded-2xl shadow px-4 py-3 border 
       ${member.status === '参加'
         ? 'bg-white border-green-200'
@@ -365,44 +365,16 @@ export function InvitationViewPage() {
           } shadow-md`}
         ></div>
         {/* アバター */}
-        <div className={`w-11 h-11 rounded-xl shadow flex items-center justify-center text-white
-          ${member.status === '参加'
-            ? 'bg-gradient-to-br from-indigo-500 to-indigo-700'
-            : member.status === '不参加'
-            ? 'bg-gradient-to-br from-indigo-500 to-indigo-700 opacity-75'
-            : 'bg-gradient-to-br from-indigo-500 to-indigo-700 opacity-90'
-          }`}
-        >
+        <div className="w-11 h-11 rounded-xl shadow bg-gradient-to-br from-indigo-500 to-indigo-700 flex items-center justify-center text-white">
           <span className="text-xl font-bold">{member.name.charAt(0)}</span>
         </div>
       </div>
       
-      {/* 名前部分 - 完全に洗練されたデザイン */}
-      <div className="flex-1 min-w-0 pl-4">
-        <p className={`font-medium text-base tracking-wide truncate
-          ${member.status === '参加'
-            ? 'text-gray-800'
-            : member.status === '不参加'
-            ? 'text-gray-500'
-            : 'text-gray-600'
-          }`}
-        >
+      {/* 名前部分 - 最適化された表示 */}
+      <div className="flex-1 pl-4" style={{ minWidth: '120px' }}>
+        <p className="font-medium text-base tracking-wide text-gray-800 truncate">
           {member.name}
         </p>
-        {/* ステータスインジケーター */}
-        <div className="flex items-center mt-0.5">
-          <span className={`inline-block w-1.5 h-1.5 rounded-full mr-1.5
-            ${member.status === '参加'
-              ? 'bg-green-500'
-              : member.status === '不参加'
-              ? 'bg-red-500'
-              : 'bg-yellow-500'
-            }`}
-          ></span>
-          <span className="text-xs text-gray-400">
-            {member.status}
-          </span>
-        </div>
       </div>
     </div>
   </div>
