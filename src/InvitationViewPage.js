@@ -338,10 +338,10 @@ export function InvitationViewPage() {
                 <div className={`relative flex-shrink-0 mr-2`}>
                   <div className={`w-9 h-9 rounded-full 
                     ${member.status === '参加'
-                      ? 'border-2 border-green-500'
+                      ? 'border-3 border-green-400 shadow-[0_0_0_1px_rgba(74,222,128,0.5)]'
                       : member.status === '不参加'
-                      ? 'border-2 border-red-500'
-                      : 'border-2 border-yellow-500'
+                      ? 'border-3 border-red-400 shadow-[0_0_0_1px_rgba(248,113,113,0.5)]'
+                      : 'border-3 border-yellow-400 shadow-[0_0_0_1px_rgba(250,204,21,0.5)]'
                     } p-0.5`}
                   >
                     <div className="w-full h-full rounded-full bg-gradient-to-r from-indigo-400 to-indigo-700 flex items-center justify-center text-white text-sm font-bold">
@@ -351,7 +351,7 @@ export function InvitationViewPage() {
                 </div>
                 {/* 名前部分 */}
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-gray-900 truncate">
+                  <p className="text-base font-normal text-gray-700 truncate bg-gray-50 px-3 py-1.5 rounded-md">
                     {member.name.length > 4 
                       ? `${member.name.slice(0, 4)}...` 
                       : member.name}
