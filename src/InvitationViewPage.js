@@ -334,26 +334,26 @@ export function InvitationViewPage() {
     }}
     className="flex items-center p-2 rounded-lg cursor-pointer transition-all hover:bg-gray-50"
   >
-    {/* アバター部分：ステータスを円の枠線で表現 - より目立つ色と太い枠線に変更 */}
-    <div className={`relative flex-shrink-0 mr-2`}>
-      <div className={`w-9 h-9 rounded-full 
+    {/* アバター部分：シンプルでアップルライクなステータス表示 */}
+    <div className={`relative flex-shrink-0 mr-3`}>
+      <div className={`w-10 h-10 rounded-full 
         ${member.status === '参加'
-          ? 'border-4 border-green-500 shadow-[0_0_0_3px_rgba(74,222,128,0.7)]'
+          ? 'ring-2 ring-green-400 shadow-sm'
           : member.status === '不参加'
-          ? 'border-4 border-red-500 shadow-[0_0_0_3px_rgba(248,113,113,0.7)]'
-          : 'border-4 border-yellow-500 shadow-[0_0_0_3px_rgba(250,204,21,0.7)]'
-        } p-0.5`}
+          ? 'ring-2 ring-red-400 shadow-sm'
+          : 'ring-2 ring-yellow-400 shadow-sm'
+        }`}
       >
-        <div className="w-full h-full rounded-full bg-gradient-to-r from-indigo-400 to-indigo-700 flex items-center justify-center text-white text-sm font-bold">
+        <div className="w-full h-full rounded-full bg-gradient-to-r from-indigo-400 to-indigo-600 flex items-center justify-center text-white text-sm font-medium">
           {member.name.charAt(0)}
         </div>
       </div>
     </div>
-    {/* 名前部分：5文字まで表示するように変更 */}
+    {/* 名前部分：表示文字数を増やす */}
     <div className="flex-1 min-w-0">
-      <p className="text-base font-normal text-gray-700 truncate bg-gray-50 px-3 py-1.5 rounded-md">
-        {member.name.length > 5 
-          ? `${member.name.slice(0, 5)}...` 
+      <p className="text-base font-normal text-gray-700 truncate bg-gray-50 px-3 py-1.5 rounded-lg">
+        {member.name.length > 10 
+          ? `${member.name.slice(0, 10)}...` 
           : member.name}
       </p>
     </div>
