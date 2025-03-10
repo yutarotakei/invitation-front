@@ -344,8 +344,8 @@ export function InvitationViewPage() {
     }}
     className="transform transition-all duration-200 hover:scale-102 hover:-translate-y-1"
   >
-    {/* 最適化されたカードデザイン */}
-    <div className={`flex items-center rounded-2xl shadow px-3.5 py-3 border 
+    {/* 最適化されたカードデザイン - モバイル対応 */}
+    <div className={`flex items-center rounded-2xl shadow px-2 py-2.5 border 
       ${member.status === '参加'
         ? 'bg-white border-green-200'
         : member.status === '不参加'
@@ -353,26 +353,26 @@ export function InvitationViewPage() {
         : 'bg-white border-yellow-200'
       }`}
     >
-      {/* アバター部分：洗練されたデザイン */}
+      {/* アバター部分：サイズ縮小 */}
       <div className="relative flex-shrink-0">
         {/* ステータスアクセント */}
-        <div className={`absolute -top-1 -right-1 w-4 h-4 rounded-full z-20
+        <div className={`absolute -top-1 -right-1 w-3 h-3 rounded-full z-20
           ${member.status === '参加'
             ? 'bg-green-400'
             : member.status === '不参加'
             ? 'bg-red-400'
             : 'bg-yellow-400'
-          } shadow-md`}
+          } shadow-sm`}
         ></div>
-        {/* アバター */}
-        <div className="w-10 h-10 rounded-xl shadow bg-gradient-to-br from-indigo-500 to-indigo-700 flex items-center justify-center text-white">
-          <span className="text-xl font-bold">{member.name.charAt(0)}</span>
+        {/* アバター - 小さいサイズに */}
+        <div className="w-8 h-8 rounded-xl shadow bg-gradient-to-br from-indigo-500 to-indigo-700 flex items-center justify-center text-white">
+          <span className="text-lg font-bold">{member.name.charAt(0)}</span>
         </div>
       </div>
       
-      {/* 名前部分 - 1行表示、折り返しなし */}
-      <div className="flex-1 pl-2.5 overflow-hidden">
-        <p className="font-medium text-base tracking-wide text-gray-800 whitespace-nowrap overflow-hidden truncate">
+      {/* 名前部分 - より多くの文字表示 */}
+      <div className="flex-1 pl-2 overflow-hidden">
+        <p className="font-medium text-sm tracking-wide text-gray-800 whitespace-nowrap overflow-hidden truncate">
           {member.name.length > 5 
             ? `${member.name.slice(0, 5)}...` 
             : member.name}
