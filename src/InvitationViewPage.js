@@ -345,7 +345,7 @@ export function InvitationViewPage() {
     className="transform transition-all duration-200 hover:scale-102 hover:-translate-y-1"
   >
     {/* 最適化されたカードデザイン */}
-    <div className={`flex items-center rounded-2xl shadow px-4 py-3 border 
+    <div className={`flex items-center rounded-2xl shadow px-3.5 py-3 border 
       ${member.status === '参加'
         ? 'bg-white border-green-200'
         : member.status === '不参加'
@@ -365,15 +365,17 @@ export function InvitationViewPage() {
           } shadow-md`}
         ></div>
         {/* アバター */}
-        <div className="w-11 h-11 rounded-xl shadow bg-gradient-to-br from-indigo-500 to-indigo-700 flex items-center justify-center text-white">
+        <div className="w-10 h-10 rounded-xl shadow bg-gradient-to-br from-indigo-500 to-indigo-700 flex items-center justify-center text-white">
           <span className="text-xl font-bold">{member.name.charAt(0)}</span>
         </div>
       </div>
       
       {/* 名前部分 - 最適化された表示 */}
-      <div className="flex-1 pl-4" style={{ minWidth: '120px' }}>
-        <p className="font-medium text-base tracking-wide text-gray-800 truncate">
-          {member.name}
+      <div className="flex-1 w-full pl-2.5">
+        <p className="font-medium text-base tracking-wide text-gray-800">
+          {member.name.length > 5 
+            ? `${member.name.slice(0, 5)}...` 
+            : member.name}
         </p>
       </div>
     </div>
