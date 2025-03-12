@@ -144,13 +144,16 @@ export function InvitationViewPage() {
     setNewTransBeneficiaries(allNames);
   };
 
-  // 取引追加処理
+  // 立替取引追加処理
   const handleAddTransaction = async () => {
-    if (isLoading) return;
-    
-    // 入力値のバリデーション
-    if (!newTransDescription || !newTransPayer || !newTransAmount || newTransBeneficiaries.length === 0) {
-      alert('すべての項目を入力してください');
+    // 入力値の検証（trim()を追加）
+    if (
+      !newTransDescription.trim() ||
+      !newTransPayer ||
+      !newTransAmount ||
+      newTransBeneficiaries.length === 0
+    ) {
+      alert('全ての項目を入力してください');
       return;
     }
 
@@ -162,7 +165,7 @@ export function InvitationViewPage() {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            description: newTransDescription,
+            description: newTransDescription.trim(),
             payer: newTransPayer,
             amount: parseFloat(newTransAmount),
             beneficiaries: newTransBeneficiaries,
@@ -171,14 +174,14 @@ export function InvitationViewPage() {
       );
 
       if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.message || '取引の追加に失敗しました');
+        throw new Error('取引追加に失敗しました');
       }
 
       // フォームをリセット
       setNewTransDescription('');
       setNewTransAmount('');
       setNewTransBeneficiaries([]);
+      setShowSettlement(false);
 
       // データを再取得
       await fetchEvent();
@@ -188,8 +191,8 @@ export function InvitationViewPage() {
         document.querySelector('#transactions')?.scrollIntoView({ behavior: 'smooth' });
       }, 100);
     } catch (err) {
-      console.error('Error:', err);
-      alert(err.message || '立替取引の追加に失敗しました');
+      console.error(err);
+      alert('立替取引の追加に失敗しました');
     } finally {
       setIsLoading(false);
     }
