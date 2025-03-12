@@ -329,48 +329,46 @@ export function InvitationViewPage() {
         </div>
 
         {/* クイックナビゲーション */}
-        <div className="sticky top-0 z-10 bg-white shadow-md rounded-2xl -mt-4 mb-8">
-          <div className="flex justify-around items-center p-2.5">
-            <a 
-              href="#location" 
-              onClick={(e) => {
-                e.preventDefault();
-                document.querySelector('#location').scrollIntoView({ behavior: 'smooth' });
-              }}
-              className="flex items-center space-x-1.5 px-4 py-1.5 rounded-xl text-gray-600 bg-gradient-to-br from-purple-50 via-pink-50 to-yellow-50 hover:from-purple-100 hover:via-pink-100 hover:to-yellow-100 transition-all whitespace-nowrap"
-            >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-              </svg>
-              <span className="text-sm font-medium">場所</span>
-            </a>
-            <a 
-              href="#expenses" 
-              onClick={(e) => {
-                e.preventDefault();
-                document.querySelector('#expenses').scrollIntoView({ behavior: 'smooth' });
-              }}
-              className="flex items-center space-x-1.5 px-4 py-1.5 rounded-xl text-gray-600 bg-gradient-to-br from-purple-50 via-pink-50 to-yellow-50 hover:from-purple-100 hover:via-pink-100 hover:to-yellow-100 transition-all whitespace-nowrap"
-            >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-              </svg>
-              <span className="text-sm font-medium">立替登録</span>
-            </a>
-            <a 
-              href="#transactions" 
-              onClick={(e) => {
-                e.preventDefault();
-                document.querySelector('#transactions').scrollIntoView({ behavior: 'smooth' });
-              }}
-              className="flex items-center space-x-1.5 px-4 py-1.5 rounded-xl text-gray-600 bg-gradient-to-br from-purple-50 via-pink-50 to-yellow-50 hover:from-purple-100 hover:via-pink-100 hover:to-yellow-100 transition-all whitespace-nowrap"
-            >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-              </svg>
-              <span className="text-sm font-medium">取引一覧</span>
-            </a>
-          </div>
+        <div className="flex justify-center gap-4 mt-6 mb-8 px-4">
+          <a 
+            href="#location" 
+            onClick={(e) => {
+              e.preventDefault();
+              document.querySelector('#location').scrollIntoView({ behavior: 'smooth' });
+            }}
+            className="flex items-center space-x-1.5 px-5 py-2 rounded-xl text-gray-600 bg-gradient-to-br from-purple-50 via-pink-50 to-yellow-50 hover:from-purple-100 hover:via-pink-100 hover:to-yellow-100 transition-all whitespace-nowrap"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+            </svg>
+            <span className="text-sm font-medium">場所</span>
+          </a>
+          <a 
+            href="#expenses" 
+            onClick={(e) => {
+              e.preventDefault();
+              document.querySelector('#expenses').scrollIntoView({ behavior: 'smooth' });
+            }}
+            className="flex items-center space-x-1.5 px-5 py-2 rounded-xl text-gray-600 bg-gradient-to-br from-purple-50 via-pink-50 to-yellow-50 hover:from-purple-100 hover:via-pink-100 hover:to-yellow-100 transition-all whitespace-nowrap"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+            </svg>
+            <span className="text-sm font-medium">立替登録</span>
+          </a>
+          <a 
+            href="#transactions" 
+            onClick={(e) => {
+              e.preventDefault();
+              document.querySelector('#transactions').scrollIntoView({ behavior: 'smooth' });
+            }}
+            className="flex items-center space-x-1.5 px-5 py-2 rounded-xl text-gray-600 bg-gradient-to-br from-purple-50 via-pink-50 to-yellow-50 hover:from-purple-100 hover:via-pink-100 hover:to-yellow-100 transition-all whitespace-nowrap"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+            </svg>
+            <span className="text-sm font-medium">取引一覧</span>
+          </a>
         </div>
 
         {/* メンバーセクション */}
@@ -576,42 +574,49 @@ export function InvitationViewPage() {
                 {eventData.transactions.map((tx) => (
                   <li 
                     key={tx.id} 
-                    className="bg-white border border-gray-200 rounded-2xl shadow-sm hover:shadow-md transition-shadow p-4"
+                    className="bg-white border border-gray-200 rounded-2xl shadow-sm hover:shadow-md transition-all cursor-pointer"
+                    onClick={() => {
+                      const beneficiariesText = tx.beneficiaries.join('、');
+                      alert(`支払者: ${tx.payer}\n支払先: ${beneficiariesText}\n金額: ¥${tx.amount.toLocaleString()}`);
+                    }}
                   >
-                    <div className="flex justify-between items-start">
-                      <div className="space-y-1 min-w-0 flex-1 mr-4">
-                        <p className="text-lg font-medium text-gray-800">
-                          {tx.description}
-                        </p>
-                        <div className="flex items-center space-x-2 text-sm text-gray-500">
-                          <span className="font-medium text-indigo-600 whitespace-nowrap">{tx.payer}</span>
-                          <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                          </svg>
-                          <div className="truncate">
-                            {tx.beneficiaries.length > 2 
-                              ? `${tx.beneficiaries.slice(0, 2).join(', ')} 他${tx.beneficiaries.length - 2}名`
-                              : tx.beneficiaries.join(', ')}
+                    <div className="p-4">
+                      <div className="flex justify-between items-start">
+                        <div className="space-y-1 min-w-0 flex-1 mr-4">
+                          <p className="text-lg font-medium text-gray-800">
+                            {tx.description}
+                          </p>
+                          <div className="flex items-center space-x-2 text-sm text-gray-500">
+                            <span className="font-medium text-indigo-600 whitespace-nowrap">{tx.payer}</span>
+                            <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                            </svg>
+                            <div className="truncate">
+                              {tx.beneficiaries.length > 2 
+                                ? `${tx.beneficiaries.slice(0, 2).join('、')} 他${tx.beneficiaries.length - 2}名`
+                                : tx.beneficiaries.join('、')}
+                            </div>
                           </div>
                         </div>
-                      </div>
-                      <div className="flex items-center space-x-3 flex-shrink-0">
-                        <span className="text-lg font-bold text-gray-900 whitespace-nowrap">
-                          ¥{tx.amount.toLocaleString()}
-                        </span>
-                        <button
-                          onClick={() => {
-                            if (window.confirm('この取引を削除してもよろしいですか？')) {
-                              handleDeleteTransaction(tx.id);
-                            }
-                          }}
-                          className="p-1.5 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-full transition-colors"
-                          aria-label="削除"
-                        >
-                          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                            <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
-                          </svg>
-                        </button>
+                        <div className="flex items-center space-x-3 flex-shrink-0">
+                          <span className="text-lg font-bold text-gray-900 whitespace-nowrap">
+                            ¥{tx.amount.toLocaleString()}
+                          </span>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation(); // 親要素のクリックイベントを防止
+                              if (window.confirm('この取引を削除してもよろしいですか？')) {
+                                handleDeleteTransaction(tx.id);
+                              }
+                            }}
+                            className="p-1.5 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-full transition-colors"
+                            aria-label="削除"
+                          >
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                              <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
+                            </svg>
+                          </button>
+                        </div>
                       </div>
                     </div>
                   </li>
@@ -632,34 +637,34 @@ export function InvitationViewPage() {
             </div>
           )}
 
-          {/* 清算結果表示（デザイン改善） */}
+          {/* 清算結果 */}
           {showSettlement && (
-            <div className="bg-white border border-gray-200 rounded-2xl shadow-md p-8">
+            <div className="bg-white border border-gray-200 rounded-2xl shadow-md p-8 mx-[-1rem]">
               <h3 className="text-center text-2xl font-semibold mb-6 text-purple-800">
                 清算結果
               </h3>
-              {settlementResult.settlements && settlementResult.settlements.length > 0 ? (
-                <div className="space-y-4">
-                  {settlementResult.settlements.map((s, index) => (
-                    <div key={index} className="flex items-center justify-between p-4 border border-gray-300 rounded-lg">
-                      <span>{s.from} → {s.to}</span>
-                      <span className="font-bold">¥{s.amount}</span>
+              <div className="space-y-4">
+                {settlementResult.settlements.map((settlement, index) => (
+                  <div key={index} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg mx-[-0.5rem]">
+                    <div className="flex items-center space-x-3">
+                      <span className="font-medium text-gray-700">{settlement.from}</span>
+                      <svg className="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                      </svg>
+                      <span className="font-medium text-gray-700">{settlement.to}</span>
                     </div>
-                  ))}
-                </div>
-              ) : (
-                <p className="text-center text-lg text-green-600">全員清算済みです</p>
-              )}
-              <div className="flex justify-end mt-4">
-                <button
-                  onClick={handleCopySettlement}
-                  className="bg-gray-200 text-gray-800 p-2 rounded-full hover:opacity-90 transition"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10m-10 4h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2h-4l-2-2H9L7 5H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                  </svg>
-                </button>
+                    <span className="text-lg font-bold text-indigo-600">
+                      ¥{settlement.amount.toLocaleString()}
+                    </span>
+                  </div>
+                ))}
               </div>
+              <button
+                onClick={handleCopySettlement}
+                className="mt-6 w-full bg-gray-100 text-gray-700 px-4 py-2 rounded-full hover:bg-gray-200 transition"
+              >
+                結果をコピー
+              </button>
             </div>
           )}
         </div>
