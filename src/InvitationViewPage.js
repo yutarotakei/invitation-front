@@ -413,152 +413,157 @@ export function InvitationViewPage() {
         transition={{ duration: 0.5 }}
         className="w-full max-w-xl mx-auto bg-white border border-gray-200 rounded-2xl shadow-md hover:shadow-xl p-8 space-y-12"
       >
-        {/* ヘッダー：タイトル・日付とクイックナビゲーション */}
-        <div className="text-center space-y-6">
-          {/* クイックナビゲーション */}
-          <div className="flex justify-center gap-4">
-            <a 
-              href="#location" 
-              onClick={(e) => {
-                e.preventDefault();
-                document.querySelector('#location')?.scrollIntoView({ behavior: 'smooth' });
-              }}
-              className="flex items-center space-x-1.5 px-4 py-2 rounded-xl text-gray-600 bg-gradient-to-br from-purple-50 via-pink-50 to-yellow-50 hover:from-purple-100 hover:via-pink-100 hover:to-yellow-100 transition-all whitespace-nowrap"
-            >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-              </svg>
-              <span className="text-sm font-medium">場所</span>
-            </a>
-            <a 
-              href="#expenses" 
-              onClick={(e) => {
-                e.preventDefault();
-                document.querySelector('#expenses').scrollIntoView({ behavior: 'smooth' });
-              }}
-              className="flex items-center space-x-1.5 px-5 py-2 rounded-xl text-gray-600 bg-gradient-to-br from-purple-50 via-pink-50 to-yellow-50 hover:from-purple-100 hover:via-pink-100 hover:to-yellow-100 transition-all whitespace-nowrap"
-            >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-              </svg>
-              <span className="text-sm font-medium">立替登録</span>
-            </a>
-            <a 
-              href="#transactions" 
-              onClick={(e) => {
-                e.preventDefault();
-                document.querySelector('#transactions').scrollIntoView({ behavior: 'smooth' });
-              }}
-              className="flex items-center space-x-1.5 px-5 py-2 rounded-xl text-gray-600 bg-gradient-to-br from-purple-50 via-pink-50 to-yellow-50 hover:from-purple-100 hover:via-pink-100 hover:to-yellow-100 transition-all whitespace-nowrap"
-            >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-              </svg>
-              <span className="text-sm font-medium">取引一覧</span>
-            </a>
-          </div>
+        {/* ヘッダー：タイトル・日付 */}
+        <div className="text-center pb-8 border-b-2 border-purple-200">
+          <h1 className="text-4xl font-bold text-indigo-800 mb-4 tracking-wide">
+            {eventData.title}
+          </h1>
+          <p className="text-2xl font-medium text-gray-600">
+            {eventData.eventDate}
+          </p>
+        </div>
 
-          {/* タイトルと日付 */}
-          <div className="pb-8 border-b-2 border-purple-200">
-            <h1 className="text-4xl font-bold text-indigo-800 mb-4 tracking-wide">
-              {eventData.title}
-            </h1>
-            <p className="text-2xl font-medium text-gray-600">
-              {eventData.eventDate}
-            </p>
+        {/* クイックナビゲーション */}
+        <div className="flex justify-center gap-3 mt-1 mb-8 px-4">
+          <a 
+            href="#location" 
+            onClick={(e) => {
+              e.preventDefault();
+              document.querySelector('#location').scrollIntoView({ behavior: 'smooth' });
+            }}
+            className="flex items-center space-x-1.5 px-5 py-2 rounded-xl text-gray-600 bg-gradient-to-br from-purple-50 via-pink-50 to-yellow-50 hover:from-purple-100 hover:via-pink-100 hover:to-yellow-100 transition-all whitespace-nowrap"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+            </svg>
+            <span className="text-sm font-medium">場所</span>
+          </a>
+          <a 
+            href="#expenses" 
+            onClick={(e) => {
+              e.preventDefault();
+              document.querySelector('#expenses').scrollIntoView({ behavior: 'smooth' });
+            }}
+            className="flex items-center space-x-1.5 px-5 py-2 rounded-xl text-gray-600 bg-gradient-to-br from-purple-50 via-pink-50 to-yellow-50 hover:from-purple-100 hover:via-pink-100 hover:to-yellow-100 transition-all whitespace-nowrap"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+            </svg>
+            <span className="text-sm font-medium">立替登録</span>
+          </a>
+          <a 
+            href="#transactions" 
+            onClick={(e) => {
+              e.preventDefault();
+              document.querySelector('#transactions').scrollIntoView({ behavior: 'smooth' });
+            }}
+            className="flex items-center space-x-1.5 px-5 py-2 rounded-xl text-gray-600 bg-gradient-to-br from-purple-50 via-pink-50 to-yellow-50 hover:from-purple-100 hover:via-pink-100 hover:to-yellow-100 transition-all whitespace-nowrap"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+            </svg>
+            <span className="text-sm font-medium">取引一覧</span>
+          </a>
+        </div>
+
+        {/* メンバーセクション */}
+        <div className="space-y-8">
+          <h2 className="text-3xl font-semibold text-purple-800 text-center">
+            メンバー
+          </h2>
+          <div className="flex justify-center">
+            <button
+              onClick={() => setIsMemberDialogOpen(true)}
+              className="bg-gradient-to-r from-pink-500 to-purple-600 text-white px-8 py-3 rounded-full shadow hover:opacity-90 transition"
+            >
+              メンバーを追加
+            </button>
+          </div>
+          {/* グリッド表示：モバイルの場合、1行2列表示 */}
+          <div className="grid grid-cols-2 gap-4">
+            {sortedMembers.map((member) => (
+              <div
+                key={member.id}
+                // 幹事は編集不可
+                onClick={member.id !== 'organizer' ? () => {
+                  setEditingMember(member);
+                  setIsEditMemberDialogOpen(true);
+                } : undefined}
+                className="transform transition-all duration-200 hover:scale-102 hover:-translate-y-1 cursor-pointer"
+              >
+                <div className={`flex items-center rounded-2xl shadow px-2 py-2.5 border 
+                  ${member.status === '参加'
+                    ? 'bg-white border-green-200'
+                    : member.status === '不参加'
+                    ? 'bg-white border-red-200'
+                    : 'bg-white border-yellow-200'
+                  }`}
+                >
+                  <div className="relative flex-shrink-0">
+                    <div className={`absolute -top-1 -right-1 w-3 h-3 rounded-full z-20
+                      ${member.status === '参加'
+                        ? 'bg-green-400'
+                        : member.status === '不参加'
+                        ? 'bg-red-400'
+                        : 'bg-yellow-400'
+                      } shadow-sm`}
+                    ></div>
+                    <div className="w-8 h-8 rounded-xl shadow bg-gradient-to-br from-indigo-500 to-indigo-700 flex items-center justify-center text-white">
+                      <span className="text-lg font-bold">{member.name.charAt(0)}</span>
+                    </div>
+                  </div>
+                  <div className="flex-1 pl-2 overflow-hidden">
+                    <p className="font-medium text-sm tracking-wide text-gray-800 whitespace-nowrap overflow-hidden truncate">
+                      {member.name.length > 5 ? `${member.name.slice(0, 5)}...` : member.name}
+                    </p>
+                    {member.id === 'organizer' && (
+                      <span className="text-xs text-gray-500">幹事</span>
+                    )}
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
 
-        {/* 場所セクション */}
-        <div className="space-y-6 mt-12" id="location">
+        {/* 場所＆集合メモセクション */}
+        <div className="space-y-10" id="location">
           <h2 className="text-3xl font-semibold text-purple-800 text-center">
             場所
           </h2>
+          {/* 場所テキスト表示 */}
           {eventData.location && (
-            <p className="text-center text-lg text-gray-700 mb-4">
+            <p className="text-center text-lg text-gray-700 mb-2">
               {eventData.location}
             </p>
           )}
-          <div className="rounded-xl overflow-hidden shadow-lg">
+          <div className="rounded-xl overflow-hidden shadow-md hover:shadow-xl">
             {eventData.location ? (
               <iframe
                 width="100%"
                 height="320"
                 frameBorder="0"
                 style={{ border: 0 }}
-                src={`https://www.google.com/maps/embed/v1/place?key=${process.env.REACT_APP_GOOGLE_MAPS_API_KEY}&q=${encodeURIComponent(eventData.location)}`}
+                src={`https://www.google.com/maps/embed/v1/place?key=${process.env.REACT_APP_GOOGLE_MAPS_API_KEY}&q=${encodeURIComponent(
+                  eventData.location
+                )}`}
                 allowFullScreen
                 title="Google Map"
               ></iframe>
             ) : (
               <div className="w-full h-80 bg-gray-200 flex items-center justify-center">
-                <p className="text-gray-600">地図を表示するには場所を入力してください</p>
+                <p className="text-gray-600">
+                  地図を表示するには場所を入力してください
+                </p>
               </div>
             )}
-          </div>
-          {eventData.meetingMemo && (
-            <p className="text-gray-700 text-center mt-4">
-              {eventData.meetingMemo}
-            </p>
-          )}
-        </div>
-
-        {/* メンバーセクション */}
-        <div className="space-y-8 mt-12">
-          <h2 className="text-3xl font-semibold text-purple-800 text-center">
-            メンバー
-          </h2>
-          
-          {/* メンバー追加ボタン */}
-          <div className="flex justify-center">
-            <button
-              onClick={() => setIsMemberDialogOpen(true)}
-              className="bg-gradient-to-r from-purple-100 via-pink-100 to-yellow-100 text-gray-700 px-6 py-3 rounded-xl font-medium hover:from-purple-200 hover:via-pink-200 hover:to-yellow-200 transition-all flex items-center space-x-2"
-            >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-              </svg>
-              <span>メンバーを追加</span>
-            </button>
-          </div>
-
-          {/* メンバーリスト */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-            {sortedMembers.map((member) => (
-              <div
-                key={member.id}
-                onClick={() => {
-                  if (member.id !== 'organizer') {
-                    setEditingMember(member);
-                    setIsEditMemberDialogOpen(true);
-                  }
-                }}
-                className={`p-3 rounded-xl border ${
-                  member.status === '参加'
-                    ? 'bg-green-50 border-green-200'
-                    : member.status === '不参加'
-                    ? 'bg-red-50 border-red-200'
-                    : 'bg-yellow-50 border-yellow-200'
-                } ${
-                  member.id !== 'organizer' ? 'cursor-pointer hover:shadow-md' : ''
-                } transition-all`}
-              >
-                <div className="text-center">
-                  <div className="font-medium text-gray-800 mb-1 truncate">
-                    {member.name}
-                  </div>
-                  <div className={`text-sm ${
-                    member.status === '参加'
-                      ? 'text-green-600'
-                      : member.status === '不参加'
-                      ? 'text-red-600'
-                      : 'text-yellow-600'
-                  }`}>
-                    {member.status}
-                  </div>
-                </div>
+            {eventData.meetingMemo && (
+              <div className="p-4 bg-white border-t border-gray-200">
+                <p className="text-sm text-gray-700 text-center">
+                  {eventData.meetingMemo}
+                </p>
               </div>
-            ))}
+            )}
           </div>
         </div>
 
@@ -691,8 +696,10 @@ export function InvitationViewPage() {
                           </span>
                           <button
                             onClick={(e) => {
-                              e.stopPropagation(); // イベントの伝播を停止
-                              handleDeleteTransaction(tx.id);
+                              e.stopPropagation(); // 親要素のクリックイベントを防止
+                              if (window.confirm('この取引を削除してもよろしいですか？')) {
+                                handleDeleteTransaction(tx.id);
+                              }
                             }}
                             className="p-1.5 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-full transition-colors"
                             aria-label="削除"
