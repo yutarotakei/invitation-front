@@ -30,6 +30,10 @@ export function InvitationViewPage() {
   // 清算結果表示のオンオフ用
   const [showSettlement, setShowSettlement] = useState(false);
 
+  // 取引詳細モーダルの状態
+  const [selectedTransaction, setSelectedTransaction] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+
   // イベント詳細を取得する関数
   const fetchEvent = async () => {
     setLoading(true);
@@ -128,16 +132,18 @@ export function InvitationViewPage() {
 
   // 立替取引追加処理
   const handleAddTransaction = async () => {
-    if (
-      !newTransDescription.trim() ||
-      !newTransPayer ||
-      !newTransAmount ||
-      newTransBeneficiaries.length === 0
-    ) {
-      alert('全ての項目を入力してください');
-      return;
-    }
+    if (isLoading) return;
+    setIsLoading(true);
     try {
+      if (
+        !newTransDescription.trim() ||
+        !newTransPayer ||
+        !newTransAmount ||
+        newTransBeneficiaries.length === 0
+      ) {
+        alert('全ての項目を入力してください');
+        return;
+      }
       const response = await fetch(
         `${process.env.REACT_APP_API_URL || ''}/api/events/${id}/transactions`,
         {
@@ -160,13 +166,17 @@ export function InvitationViewPage() {
       setShowSettlement(false);
       fetchEvent();
     } catch (err) {
-      console.error(err);
+      console.error('Error:', err);
       alert('立替取引の追加に失敗しました');
+    } finally {
+      setIsLoading(false);
     }
   };
 
   // 立替取引削除処理（削除前に確認）
   const handleDeleteTransaction = async (transactionId) => {
+    if (isLoading) return;
+    setIsLoading(true);
     if (!window.confirm('本当に削除しますか？')) return;
     try {
       const response = await fetch(
@@ -181,8 +191,10 @@ export function InvitationViewPage() {
       setShowSettlement(false);
       fetchEvent();
     } catch (err) {
-      console.error(err);
+      console.error('Error:', err);
       alert('取引削除に失敗しました');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -293,6 +305,59 @@ export function InvitationViewPage() {
     });
   };
 
+  // 取引詳細モーダル
+  const TransactionDetailModal = ({ transaction, onClose }) => {
+    if (!transaction) return null;
+
+    return (
+      <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+        <div className="bg-white rounded-2xl w-full max-w-md p-6 space-y-4">
+          <div className="text-xl font-semibold text-gray-800 pb-2 border-b border-gray-200">
+            {transaction.description}
+          </div>
+          <div className="space-y-4">
+            <div>
+              <div className="text-sm text-gray-500 mb-1">支払者</div>
+              <div className="text-lg font-medium text-indigo-600">{transaction.payer}</div>
+            </div>
+            <div>
+              <div className="text-sm text-gray-500 mb-1">支払先</div>
+              <div className="bg-gray-50 rounded-lg p-3">
+                {transaction.beneficiaries.map((beneficiary, index) => (
+                  <div key={index} className="text-gray-700">
+                    {beneficiary}
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div>
+              <div className="text-sm text-gray-500 mb-1">金額</div>
+              <div className="text-xl font-bold text-gray-900">
+                ¥{transaction.amount.toLocaleString()}
+              </div>
+            </div>
+          </div>
+          <button
+            onClick={onClose}
+            className="mt-6 w-full bg-gradient-to-r from-purple-100 via-pink-100 to-yellow-100 text-gray-700 px-4 py-3 rounded-xl font-medium hover:from-purple-200 hover:via-pink-200 hover:to-yellow-200 transition-all"
+          >
+            閉じる
+          </button>
+        </div>
+      </div>
+    );
+  };
+
+  // ローディングコンポーネント
+  const LoadingOverlay = () => (
+    <div className="fixed inset-0 bg-white bg-opacity-75 z-50 flex items-center justify-center">
+      <div className="space-y-3 text-center">
+        <div className="inline-block animate-spin rounded-full h-8 w-8 border-4 border-purple-500 border-t-transparent"></div>
+        <div className="text-gray-600 font-medium">読み込み中...</div>
+      </div>
+    </div>
+  );
+
   if (loading) return <div>読み込み中…</div>;
   if (error) return <div>{error}</div>;
   if (!eventData) return <div>イベントが見つかりません</div>;
@@ -329,7 +394,7 @@ export function InvitationViewPage() {
         </div>
 
         {/* クイックナビゲーション */}
-        <div className="flex justify-center gap-4 mt-6 mb-8 px-4">
+        <div className="flex justify-center gap-3 mt-3 mb-8 px-4">
           <a 
             href="#location" 
             onClick={(e) => {
@@ -575,10 +640,7 @@ export function InvitationViewPage() {
                   <li 
                     key={tx.id} 
                     className="bg-white border border-gray-200 rounded-2xl shadow-sm hover:shadow-md transition-all cursor-pointer"
-                    onClick={() => {
-                      const beneficiariesText = tx.beneficiaries.join('、');
-                      alert(`支払者: ${tx.payer}\n支払先: ${beneficiariesText}\n金額: ¥${tx.amount.toLocaleString()}`);
-                    }}
+                    onClick={() => setSelectedTransaction(tx)}
                   >
                     <div className="p-4">
                       <div className="flex justify-between items-start">
@@ -797,6 +859,15 @@ export function InvitationViewPage() {
           </motion.div>
         </motion.div>
       )}
+
+      {/* 取引詳細モーダル */}
+      <TransactionDetailModal
+        transaction={selectedTransaction}
+        onClose={() => setSelectedTransaction(null)}
+      />
+
+      {/* ローディングオーバーレイ */}
+      {isLoading && <LoadingOverlay />}
     </div>
   );
 }
