@@ -119,6 +119,13 @@ export function InvitationViewPage() {
     }
   };
 
+  // 全員チェック機能
+  const handleCheckAllBeneficiaries = () => {
+    // 表示されている全メンバーの名前を取得
+    const allNames = displayedMembers.map((member) => member.name);
+    setNewTransBeneficiaries(allNames);
+  };
+
   // 立替取引追加処理
   const handleAddTransaction = async () => {
     if (
@@ -158,8 +165,9 @@ export function InvitationViewPage() {
     }
   };
 
-  // 立替取引削除処理
+  // 立替取引削除処理（削除前に確認）
   const handleDeleteTransaction = async (transactionId) => {
+    if (!window.confirm('本当に削除しますか？')) return;
     try {
       const response = await fetch(
         `${process.env.REACT_APP_API_URL || ''}/api/events/${id}/transactions/${transactionId}`,
@@ -270,13 +278,13 @@ export function InvitationViewPage() {
   
   // 精算結果（「精算を計算する！」ボタン押下時に利用）
   const settlementResult = computeSettlement();
-  // 精算結果のテキスト（各行：「支払者 → 対象者 : ¥金額」）
-  const settlementText =
-    settlementResult.settlements && settlementResult.settlements.length > 0
-      ? settlementResult.settlements
-          .map((s) => `${s.from} → ${s.to} : ¥${s.amount}`)
-          .join('\n')
-      : '全員清算済みです';
+
+  // 清算結果のテキスト（コピー用）
+  const settlementText = settlementResult.settlements && settlementResult.settlements.length > 0
+    ? settlementResult.settlements
+        .map((s) => `${s.from} → ${s.to} : ¥${s.amount}`)
+        .join('\n')
+    : '全員清算済みです';
 
   // 精算結果をクリップボードにコピーする処理
   const handleCopySettlement = () => {
@@ -320,6 +328,13 @@ export function InvitationViewPage() {
           </p>
         </div>
 
+        {/* アンカーリンクナビゲーション */}
+        <div className="flex justify-around my-4">
+          <a href="#location" className="text-indigo-600 hover:underline">場所</a>
+          <a href="#transaction" className="text-indigo-600 hover:underline">立替を登録</a>
+          <a href="#transaction-list" className="text-indigo-600 hover:underline">取引一覧</a>
+        </div>
+
         {/* メンバーセクション */}
         <div className="space-y-8">
           <h2 className="text-3xl font-semibold text-purple-800 text-center">
@@ -335,61 +350,62 @@ export function InvitationViewPage() {
           </div>
           {/* グリッド表示：モバイルの場合、1行2列表示 */}
           <div className="grid grid-cols-2 gap-4">
-          {sortedMembers.map((member) => (
-  <div
-    key={member.id}
-    onClick={() => {
-      setEditingMember(member);
-      setIsEditMemberDialogOpen(true);
-    }}
-    className="transform transition-all duration-200 hover:scale-102 hover:-translate-y-1"
-  >
-    {/* 最適化されたカードデザイン - モバイル対応 */}
-    <div className={`flex items-center rounded-2xl shadow px-2 py-2.5 border 
-      ${member.status === '参加'
-        ? 'bg-white border-green-200'
-        : member.status === '不参加'
-        ? 'bg-white border-red-200'
-        : 'bg-white border-yellow-200'
-      }`}
-    >
-      {/* アバター部分：サイズ縮小 */}
-      <div className="relative flex-shrink-0">
-        {/* ステータスアクセント */}
-        <div className={`absolute -top-1 -right-1 w-3 h-3 rounded-full z-20
-          ${member.status === '参加'
-            ? 'bg-green-400'
-            : member.status === '不参加'
-            ? 'bg-red-400'
-            : 'bg-yellow-400'
-          } shadow-sm`}
-        ></div>
-        {/* アバター - 小さいサイズに */}
-        <div className="w-8 h-8 rounded-xl shadow bg-gradient-to-br from-indigo-500 to-indigo-700 flex items-center justify-center text-white">
-          <span className="text-lg font-bold">{member.name.charAt(0)}</span>
-        </div>
-      </div>
-      
-      {/* 名前部分 - より多くの文字表示 */}
-      <div className="flex-1 pl-2 overflow-hidden">
-        <p className="font-medium text-sm tracking-wide text-gray-800 whitespace-nowrap overflow-hidden truncate">
-          {member.name.length > 5 
-            ? `${member.name.slice(0, 5)}...` 
-            : member.name}
-        </p>
-      </div>
-    </div>
-  </div>
-))}
-
+            {sortedMembers.map((member) => (
+              <div
+                key={member.id}
+                // 幹事は編集不可
+                onClick={member.id !== 'organizer' ? () => {
+                  setEditingMember(member);
+                  setIsEditMemberDialogOpen(true);
+                } : undefined}
+                className="transform transition-all duration-200 hover:scale-102 hover:-translate-y-1 cursor-pointer"
+              >
+                <div className={`flex items-center rounded-2xl shadow px-2 py-2.5 border 
+                  ${member.status === '参加'
+                    ? 'bg-white border-green-200'
+                    : member.status === '不参加'
+                    ? 'bg-white border-red-200'
+                    : 'bg-white border-yellow-200'
+                  }`}
+                >
+                  <div className="relative flex-shrink-0">
+                    <div className={`absolute -top-1 -right-1 w-3 h-3 rounded-full z-20
+                      ${member.status === '参加'
+                        ? 'bg-green-400'
+                        : member.status === '不参加'
+                        ? 'bg-red-400'
+                        : 'bg-yellow-400'
+                      } shadow-sm`}
+                    ></div>
+                    <div className="w-8 h-8 rounded-xl shadow bg-gradient-to-br from-indigo-500 to-indigo-700 flex items-center justify-center text-white">
+                      <span className="text-lg font-bold">{member.name.charAt(0)}</span>
+                    </div>
+                  </div>
+                  <div className="flex-1 pl-2 overflow-hidden">
+                    <p className="font-medium text-sm tracking-wide text-gray-800 whitespace-nowrap overflow-hidden truncate">
+                      {member.name.length > 5 ? `${member.name.slice(0, 5)}...` : member.name}
+                    </p>
+                    {member.id === 'organizer' && (
+                      <span className="text-xs text-gray-500">幹事</span>
+                    )}
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
 
         {/* 場所＆集合メモセクション */}
-        <div className="space-y-10">
+        <div className="space-y-10" id="location">
           <h2 className="text-3xl font-semibold text-purple-800 text-center">
             場所
           </h2>
+          {/* 場所テキスト表示 */}
+          {eventData.location && (
+            <p className="text-center text-lg text-gray-700 mb-2">
+              {eventData.location}
+            </p>
+          )}
           <div className="rounded-xl overflow-hidden shadow-md hover:shadow-xl">
             {eventData.location ? (
               <iframe
@@ -410,7 +426,6 @@ export function InvitationViewPage() {
                 </p>
               </div>
             )}
-            {/* 集合場所メモ：フォントサイズ小さく */}
             {eventData.meetingMemo && (
               <div className="p-4 bg-white border-t border-gray-200">
                 <p className="text-sm text-gray-700 text-center">
@@ -422,11 +437,10 @@ export function InvitationViewPage() {
         </div>
 
         {/* 立替精算セクション */}
-        <div className="space-y-10 border-t-2 pt-10 mt-20">
+        <div className="space-y-10 border-t-2 pt-10 mt-20" id="transaction">
           <h2 className="text-3xl font-semibold text-purple-800 text-center">
             立替を登録する
           </h2>
-          {/* 取引入力フォーム */}
           <div className="bg-gray-50 border border-gray-200 rounded-2xl shadow-md hover:shadow-xl p-8 space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="flex flex-col space-y-2">
@@ -456,6 +470,15 @@ export function InvitationViewPage() {
             </div>
             <div className="flex flex-col space-y-2">
               <label className="text-lg text-gray-700">誰の分の</label>
+              {/* 全員チェックボタン */}
+              <div className="flex justify-end mb-2">
+                <button
+                  onClick={handleCheckAllBeneficiaries}
+                  className="bg-indigo-600 text-white px-4 py-1 rounded-full text-sm hover:opacity-90 transition"
+                >
+                  全員チェック
+                </button>
+              </div>
               <div className="flex flex-wrap gap-2">
                 {displayedMembers.map((member) => (
                   <label
@@ -493,7 +516,7 @@ export function InvitationViewPage() {
 
           {/* 取引一覧 */}
           {eventData.transactions && eventData.transactions.length > 0 && (
-            <div className="space-y-6">
+            <div className="space-y-6" id="transaction-list">
               <h3 className="text-2xl font-semibold text-gray-800">取引一覧</h3>
               <ul className="space-y-4">
                 {eventData.transactions.map((tx) => (
@@ -505,7 +528,6 @@ export function InvitationViewPage() {
                       <p className="text-xl font-medium text-gray-700">
                         {tx.description}
                       </p>
-                      {/* 支払者・対象の名前：文字サイズ小さく */}
                       <p className="text-sm text-gray-500">
                         {tx.payer} → {tx.beneficiaries.join(', ')}
                       </p>
@@ -514,7 +536,6 @@ export function InvitationViewPage() {
                       <span className="text-xl font-bold text-gray-900">
                         ¥{tx.amount.toLocaleString()}
                       </span>
-                      {/* ゴミ箱アイコンボタン */}
                       <button
                         onClick={() => handleDeleteTransaction(tx.id)}
                         className="p-2 text-red-500 hover:text-red-700 transition-colors"
@@ -552,21 +573,29 @@ export function InvitationViewPage() {
             </div>
           )}
 
-          {/* 清算結果：<pre>要素で全て表示 */}
+          {/* 清算結果表示（デザイン改善） */}
           {showSettlement && (
             <div className="bg-white border border-gray-200 rounded-2xl shadow-md p-8">
               <h3 className="text-center text-2xl font-semibold mb-6 text-purple-800">
                 清算結果
               </h3>
-              <pre className="w-full p-4 text-base text-gray-800 whitespace-pre-wrap break-words">
-                {settlementText}
-              </pre>
-              <div className="flex justify-end mt-2">
+              {settlementResult.settlements && settlementResult.settlements.length > 0 ? (
+                <div className="space-y-4">
+                  {settlementResult.settlements.map((s, index) => (
+                    <div key={index} className="flex items-center justify-between p-4 border border-gray-300 rounded-lg">
+                      <span>{s.from} → {s.to}</span>
+                      <span className="font-bold">¥{s.amount}</span>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-center text-lg text-green-600">全員清算済みです</p>
+              )}
+              <div className="flex justify-end mt-4">
                 <button
                   onClick={handleCopySettlement}
                   className="bg-gray-200 text-gray-800 p-2 rounded-full hover:opacity-90 transition"
                 >
-                  {/* シンプルなクリップボードアイコン */}
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10m-10 4h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2h-4l-2-2H9L7 5H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                   </svg>
@@ -601,7 +630,6 @@ export function InvitationViewPage() {
               placeholder="名前を入力"
               className="w-full border border-gray-300 rounded-lg p-4 focus:outline-none focus:border-indigo-500 transition"
             />
-            {/* ステータス選択ボタン群 */}
             <div className="flex justify-around">
               <button
                 onClick={() => setNewMemberStatus('参加')}
