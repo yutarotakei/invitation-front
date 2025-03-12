@@ -147,6 +147,13 @@ export function InvitationViewPage() {
   // 取引追加処理
   const handleAddTransaction = async () => {
     if (isLoading) return;
+    
+    // 入力値のバリデーション
+    if (!newTransDescription || !newTransPayer || !newTransAmount || newTransBeneficiaries.length === 0) {
+      alert('すべての項目を入力してください');
+      return;
+    }
+
     setIsLoading(true);
     try {
       const response = await fetch(
@@ -162,20 +169,27 @@ export function InvitationViewPage() {
           }),
         }
       );
+
       if (!response.ok) {
-        throw new Error('取引追加に失敗しました');
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.message || '取引の追加に失敗しました');
       }
+
+      // フォームをリセット
       setNewTransDescription('');
       setNewTransAmount('');
       setNewTransBeneficiaries([]);
+
+      // データを再取得
       await fetchEvent();
-      // 取引追加後に取引一覧までスクロール
+
+      // 取引一覧までスクロール
       setTimeout(() => {
         document.querySelector('#transactions')?.scrollIntoView({ behavior: 'smooth' });
       }, 100);
     } catch (err) {
       console.error('Error:', err);
-      alert('立替取引の追加に失敗しました');
+      alert(err.message || '立替取引の追加に失敗しました');
     } finally {
       setIsLoading(false);
     }
@@ -527,7 +541,7 @@ export function InvitationViewPage() {
         </div>
 
         {/* 場所＆集合メモセクション */}
-        <div className="space-y-10" id="location">
+        <div className="space-y-10 mt-16" id="location">
           <h2 className="text-3xl font-semibold text-purple-800 text-center">
             場所
           </h2>
@@ -568,7 +582,7 @@ export function InvitationViewPage() {
         </div>
 
         {/* 立替登録セクション */}
-        <div id="expenses" className="space-y-6">
+        <div id="expenses" className="space-y-6 mt-16">
           <h2 className="text-3xl font-semibold text-purple-800 text-center">
             立替を登録する
           </h2>
