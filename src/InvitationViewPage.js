@@ -8,8 +8,9 @@ export function InvitationViewPage() {
   const { id } = useParams();
   const navigate = useNavigate();
 
+  const [initialLoading, setInitialLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [eventData, setEventData] = useState(null);
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   // メンバー追加用の状態
@@ -32,47 +33,38 @@ export function InvitationViewPage() {
 
   // 取引詳細モーダルの状態
   const [selectedTransaction, setSelectedTransaction] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
 
-  // 初期ローディング用の状態
-  const [initialLoading, setInitialLoading] = useState(true);
-
-  // イベント詳細を取得する関数
+  // イベントデータの取得
   const fetchEvent = async () => {
-    setLoading(true);
     try {
       const response = await fetch(
         `${process.env.REACT_APP_API_URL || ''}/api/events/${id}`
       );
       if (!response.ok) {
-        throw new Error('イベント情報の取得に失敗しました');
+        throw new Error('イベントの取得に失敗しました');
       }
       const data = await response.json();
       setEventData(data);
-      if (data.members && data.members.length > 0) {
-        setNewTransPayer(data.members[0].name);
+      // 取引が複数ある場合は精算結果を自動表示
+      if (data?.transactions?.length > 1) {
+        setShowSettlement(true);
       }
+      return data;
     } catch (err) {
-      console.error(err);
-      setError('イベント情報の取得に失敗しました');
-    } finally {
-      setLoading(false);
+      console.error('Error fetching event:', err);
+      setError(err.message);
+      throw err;
     }
   };
 
+  // 初期データ取得
   useEffect(() => {
     const fetchData = async () => {
       setInitialLoading(true);
       try {
-        const data = await fetchEvent();
-        setEventData(data);
-        // 取引が複数ある場合は精算結果を自動表示
-        if (data?.transactions?.length > 1) {
-          setShowSettlement(true);
-        }
+        await fetchEvent();
       } catch (error) {
         console.error('Error:', error);
-        setError('データの取得に失敗しました');
       } finally {
         setInitialLoading(false);
       }
@@ -152,7 +144,7 @@ export function InvitationViewPage() {
     setNewTransBeneficiaries(allNames);
   };
 
-  // 立替取引追加処理
+  // 取引追加処理
   const handleAddTransaction = async () => {
     if (isLoading) return;
     setIsLoading(true);
@@ -176,7 +168,6 @@ export function InvitationViewPage() {
       setNewTransDescription('');
       setNewTransAmount('');
       setNewTransBeneficiaries([]);
-      setShowSettlement(false);
       await fetchEvent();
       // 取引追加後に取引一覧までスクロール
       setTimeout(() => {
@@ -206,7 +197,7 @@ export function InvitationViewPage() {
         throw new Error('取引削除に失敗しました');
       }
       setShowSettlement(false);
-      fetchEvent();
+      await fetchEvent();
     } catch (err) {
       console.error('Error:', err);
       alert('取引削除に失敗しました');
@@ -386,8 +377,20 @@ export function InvitationViewPage() {
 
   // メインレンダリング
   if (initialLoading) return <InitialLoadingOverlay />;
-  if (error) return <div>{error}</div>;
-  if (!eventData) return <div>イベントが見つかりません</div>;
+  if (error) return (
+    <div className="min-h-screen bg-gradient-to-br from-purple-100 via-pink-100 to-yellow-100 flex items-center justify-center">
+      <div className="bg-white rounded-2xl shadow-lg p-8">
+        <p className="text-red-600 text-center">{error}</p>
+      </div>
+    </div>
+  );
+  if (!eventData) return (
+    <div className="min-h-screen bg-gradient-to-br from-purple-100 via-pink-100 to-yellow-100 flex items-center justify-center">
+      <div className="bg-white rounded-2xl shadow-lg p-8">
+        <p className="text-gray-600 text-center">イベントが見つかりません</p>
+      </div>
+    </div>
+  );
 
   return (
     <div
