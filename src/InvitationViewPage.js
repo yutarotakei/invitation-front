@@ -144,8 +144,24 @@ export function InvitationViewPage() {
     setNewTransBeneficiaries(allNames);
   };
 
+  // 支払者の選択処理を改善
+  const handlePayerSelect = (payerName) => {
+    console.log('Selected payer:', payerName);
+    setNewTransPayer(payerName);
+  };
+
   // 立替取引追加処理
-  const handleAddTransaction = async () => {
+  const handleAddTransaction = async (e) => {
+    e.preventDefault(); // フォーム送信の防止
+    
+    // デバッグ用のログ
+    console.log('Adding transaction with:', {
+      description: newTransDescription,
+      payer: newTransPayer,
+      amount: newTransAmount,
+      beneficiaries: newTransBeneficiaries
+    });
+
     // 入力値の検証（trim()を追加）
     if (
       !newTransDescription.trim() ||
@@ -153,32 +169,42 @@ export function InvitationViewPage() {
       !newTransAmount ||
       newTransBeneficiaries.length === 0
     ) {
+      console.log('Validation failed:', {
+        descriptionEmpty: !newTransDescription.trim(),
+        payerEmpty: !newTransPayer,
+        amountEmpty: !newTransAmount,
+        beneficiariesEmpty: newTransBeneficiaries.length === 0
+      });
       alert('全ての項目を入力してください');
       return;
     }
 
     setIsLoading(true);
     try {
+      const requestBody = {
+        description: newTransDescription.trim(),
+        payer: newTransPayer,
+        amount: parseFloat(newTransAmount),
+        beneficiaries: newTransBeneficiaries,
+      };
+
       const response = await fetch(
         `${process.env.REACT_APP_API_URL || ''}/api/events/${id}/transactions`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            description: newTransDescription.trim(),
-            payer: newTransPayer,
-            amount: parseFloat(newTransAmount),
-            beneficiaries: newTransBeneficiaries,
-          }),
+          body: JSON.stringify(requestBody),
         }
       );
 
       if (!response.ok) {
-        throw new Error('取引追加に失敗しました');
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.message || '取引追加に失敗しました');
       }
 
       // フォームをリセット
       setNewTransDescription('');
+      setNewTransPayer(''); // 支払者もリセット
       setNewTransAmount('');
       setNewTransBeneficiaries([]);
       setShowSettlement(false);
@@ -191,8 +217,8 @@ export function InvitationViewPage() {
         document.querySelector('#transactions')?.scrollIntoView({ behavior: 'smooth' });
       }, 100);
     } catch (err) {
-      console.error(err);
-      alert('立替取引の追加に失敗しました');
+      console.error('Error adding transaction:', err);
+      alert(err.message || '立替取引の追加に失敗しました');
     } finally {
       setIsLoading(false);
     }
@@ -601,13 +627,16 @@ export function InvitationViewPage() {
                   className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:border-indigo-500 transition"
                 />
               </div>
-              <div className="flex flex-col space-y-2">
-                <label className="text-lg text-gray-700">誰が</label>
+              <div className="space-y-2">
+                <label className="block text-sm font-medium text-gray-700">
+                  誰が
+                </label>
                 <select
                   value={newTransPayer}
-                  onChange={(e) => setNewTransPayer(e.target.value)}
-                  className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:border-indigo-500 transition"
+                  onChange={(e) => handlePayerSelect(e.target.value)}
+                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                 >
+                  <option value="">選択してください</option>
                   {displayedMembers.map((member) => (
                     <option key={member.id} value={member.name}>
                       {member.name}
@@ -669,10 +698,12 @@ export function InvitationViewPage() {
               />
             </div>
             <button
+              type="button"
               onClick={handleAddTransaction}
-              className="w-full bg-gradient-to-r from-teal-400 to-blue-500 text-white rounded-full px-6 py-3 text-lg hover:opacity-90 transition"
+              disabled={isLoading}
+              className="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 py-2 rounded-md hover:from-purple-600 hover:to-pink-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              取引を追加
+              {isLoading ? '追加中...' : '取引を追加する'}
             </button>
           </div>
 
