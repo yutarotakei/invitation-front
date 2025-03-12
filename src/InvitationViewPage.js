@@ -328,11 +328,38 @@ export function InvitationViewPage() {
           </p>
         </div>
 
-        {/* アンカーリンクナビゲーション */}
-        <div className="flex justify-around my-4">
-          <a href="#location" className="text-indigo-600 hover:underline">場所</a>
-          <a href="#transaction" className="text-indigo-600 hover:underline">立替を登録</a>
-          <a href="#transaction-list" className="text-indigo-600 hover:underline">取引一覧</a>
+        {/* クイックナビゲーション */}
+        <div className="sticky top-0 z-10 bg-white shadow-md rounded-2xl mt-8 mb-4">
+          <div className="flex justify-around p-4 space-x-2">
+            <a 
+              href="#location" 
+              className="flex-1 flex flex-col items-center px-4 py-2 rounded-xl text-gray-600 hover:bg-gradient-to-br hover:from-purple-100 hover:via-pink-100 hover:to-yellow-100 transition-all"
+            >
+              <svg className="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+              <span className="text-sm font-medium">場所</span>
+            </a>
+            <a 
+              href="#expenses" 
+              className="flex-1 flex flex-col items-center px-4 py-2 rounded-xl text-gray-600 hover:bg-gradient-to-br hover:from-purple-100 hover:via-pink-100 hover:to-yellow-100 transition-all"
+            >
+              <svg className="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+              </svg>
+              <span className="text-sm font-medium">立替登録</span>
+            </a>
+            <a 
+              href="#transactions" 
+              className="flex-1 flex flex-col items-center px-4 py-2 rounded-xl text-gray-600 hover:bg-gradient-to-br hover:from-purple-100 hover:via-pink-100 hover:to-yellow-100 transition-all"
+            >
+              <svg className="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+              </svg>
+              <span className="text-sm font-medium">取引一覧</span>
+            </a>
+          </div>
         </div>
 
         {/* メンバーセクション */}
@@ -436,8 +463,8 @@ export function InvitationViewPage() {
           </div>
         </div>
 
-        {/* 立替精算セクション */}
-        <div className="space-y-10 border-t-2 pt-10 mt-20" id="transaction">
+        {/* 立替登録セクション */}
+        <div id="expenses" className="space-y-6">
           <h2 className="text-3xl font-semibold text-purple-800 text-center">
             立替を登録する
           </h2>
@@ -469,29 +496,37 @@ export function InvitationViewPage() {
               </div>
             </div>
             <div className="flex flex-col space-y-2">
-              <label className="text-lg text-gray-700">誰の分の</label>
-              {/* 全員チェックボタン */}
-              <div className="flex justify-end mb-2">
+              <div className="flex justify-between items-center mb-2">
+                <label className="text-lg text-gray-700">誰の分の</label>
                 <button
                   onClick={handleCheckAllBeneficiaries}
-                  className="bg-indigo-600 text-white px-4 py-1 rounded-full text-sm hover:opacity-90 transition"
+                  className="bg-gradient-to-r from-purple-100 via-pink-100 to-yellow-100 text-gray-700 px-4 py-1.5 rounded-full text-sm font-medium hover:shadow-md transition-all flex items-center space-x-1"
                 >
-                  全員チェック
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <span>全員を選択</span>
                 </button>
               </div>
-              <div className="flex flex-wrap gap-2">
+              <div className="grid grid-cols-2 gap-2">
                 {displayedMembers.map((member) => (
                   <label
                     key={member.id}
-                    className="inline-flex items-center space-x-1 border border-gray-300 rounded-full px-2 py-1 cursor-pointer hover:bg-gray-100 transition"
+                    className={`flex items-center space-x-2 p-2 rounded-lg border border-gray-200 
+                      ${newTransBeneficiaries.includes(member.name) 
+                        ? 'bg-gradient-to-r from-purple-50 via-pink-50 to-yellow-50 border-purple-200' 
+                        : 'bg-white'
+                      } transition-all cursor-pointer hover:shadow-sm`}
                   >
                     <input
                       type="checkbox"
-                      className="form-checkbox h-4 w-4 text-indigo-600"
+                      className="form-checkbox h-4 w-4 text-purple-600 rounded border-gray-300 focus:ring-purple-500"
                       checked={newTransBeneficiaries.includes(member.name)}
                       onChange={() => toggleBeneficiary(member.name)}
                     />
-                    <span className="text-sm">{member.name}</span>
+                    <span className="text-sm font-medium text-gray-700 truncate">
+                      {member.name}
+                    </span>
                   </label>
                 ))}
               </div>
@@ -516,7 +551,7 @@ export function InvitationViewPage() {
 
           {/* 取引一覧 */}
           {eventData.transactions && eventData.transactions.length > 0 && (
-            <div className="space-y-6" id="transaction-list">
+            <div className="space-y-6" id="transactions">
               <h3 className="text-2xl font-semibold text-gray-800">取引一覧</h3>
               <ul className="space-y-4">
                 {eventData.transactions.map((tx) => (
