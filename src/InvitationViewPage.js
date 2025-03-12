@@ -9,7 +9,8 @@ export function InvitationViewPage() {
   const navigate = useNavigate();
 
   const [eventData, setEventData] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [initialLoading, setInitialLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
   // メンバー追加用の状態
@@ -32,11 +33,10 @@ export function InvitationViewPage() {
 
   // 取引詳細モーダルの状態
   const [selectedTransaction, setSelectedTransaction] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
 
   // イベント詳細を取得する関数
   const fetchEvent = async () => {
-    setLoading(true);
+    setInitialLoading(true);
     try {
       const response = await fetch(
         `${process.env.REACT_APP_API_URL || ''}/api/events/${id}`
@@ -53,14 +53,21 @@ export function InvitationViewPage() {
       console.error(err);
       setError('イベント情報の取得に失敗しました');
     } finally {
-      setLoading(false);
+      setInitialLoading(false);
     }
   };
 
+  // 初期データ取得
   useEffect(() => {
-    fetchEvent();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id]);
+    const fetchData = async () => {
+      try {
+        await fetchEvent();
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    };
+    fetchData();
+  }, []);
 
   // メンバー追加処理
   const handleAddMember = async () => {
@@ -92,6 +99,8 @@ export function InvitationViewPage() {
 
   // メンバーのステータス更新処理
   const handleUpdateMemberStatus = async (memberId, newStatus) => {
+    if (isLoading) return;
+    setIsLoading(true);
     try {
       const response = await fetch(
         `${process.env.REACT_APP_API_URL || ''}/api/events/${id}/members/${memberId}`,
@@ -109,6 +118,8 @@ export function InvitationViewPage() {
     } catch (err) {
       console.error(err);
       alert('メンバー更新に失敗しました');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -165,6 +176,9 @@ export function InvitationViewPage() {
       setNewTransBeneficiaries([]);
       setShowSettlement(false);
       fetchEvent();
+      setTimeout(() => {
+        document.querySelector('#transactions')?.scrollIntoView({ behavior: 'smooth' });
+      }, 500);
     } catch (err) {
       console.error('Error:', err);
       alert('立替取引の追加に失敗しました');
@@ -348,19 +362,37 @@ export function InvitationViewPage() {
     );
   };
 
-  // ローディングコンポーネント
-  const LoadingOverlay = () => (
-    <div className="fixed inset-0 bg-white bg-opacity-75 z-50 flex items-center justify-center">
-      <div className="space-y-3 text-center">
-        <div className="inline-block animate-spin rounded-full h-8 w-8 border-4 border-purple-500 border-t-transparent"></div>
-        <div className="text-gray-600 font-medium">読み込み中...</div>
+  // 初期ローディング用コンポーネント
+  const InitialLoadingOverlay = () => (
+    <div className="min-h-screen bg-gradient-to-br from-purple-100 via-pink-100 to-yellow-100 flex items-center justify-center">
+      <div className="bg-white rounded-2xl shadow-lg p-8 space-y-4">
+        <div className="animate-spin rounded-full h-12 w-12 border-4 border-purple-500 border-t-transparent mx-auto"></div>
+        <p className="text-gray-600 font-medium text-center">読み込み中...</p>
       </div>
     </div>
   );
 
-  if (loading) return <div>読み込み中…</div>;
+  // アクション中のローディングコンポーネント
+  const LoadingOverlay = () => (
+    <div className="fixed inset-0 bg-white bg-opacity-75 z-50 flex items-center justify-center">
+      <div className="space-y-3 text-center">
+        <div className="inline-block animate-spin rounded-full h-8 w-8 border-4 border-purple-500 border-t-transparent"></div>
+        <div className="text-gray-600 font-medium">処理中...</div>
+      </div>
+    </div>
+  );
+
+  // メインレンダリング
+  if (initialLoading) return <InitialLoadingOverlay />;
   if (error) return <div>{error}</div>;
   if (!eventData) return <div>イベントが見つかりません</div>;
+
+  // 取引が複数ある場合は精算結果を自動表示
+  useEffect(() => {
+    if (eventData?.transactions?.length > 1) {
+      setShowSettlement(true);
+    }
+  }, [eventData?.transactions?.length]);
 
   return (
     <div
@@ -394,7 +426,7 @@ export function InvitationViewPage() {
         </div>
 
         {/* クイックナビゲーション */}
-        <div className="flex justify-center gap-3 mt-3 mb-8 px-4">
+        <div className="flex justify-center gap-3 mt-1 mb-8 px-4">
           <a 
             href="#location" 
             onClick={(e) => {
@@ -865,9 +897,6 @@ export function InvitationViewPage() {
         transaction={selectedTransaction}
         onClose={() => setSelectedTransaction(null)}
       />
-
-      {/* ローディングオーバーレイ */}
-      {isLoading && <LoadingOverlay />}
     </div>
   );
 }

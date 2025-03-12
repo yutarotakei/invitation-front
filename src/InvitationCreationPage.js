@@ -161,7 +161,7 @@ function LocationBlock({ location, setLocation, meetingMemo, setMeetingMemo }) {
           type="text"
           value={meetingMemo}
           onChange={(e) => setMeetingMemo(e.target.value)}
-          placeholder="集合場所の目印（例：五反田駅東口改札前）"
+          placeholder="集合場所の目印（例：五反田駅改札前）"
           className="w-full border border-purple-300 rounded-full py-3 px-4 bg-white focus:outline-none focus:ring-2 focus:ring-purple-400 text-center transition placeholder-gray-500"
         />
       </div>
