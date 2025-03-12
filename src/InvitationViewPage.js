@@ -182,7 +182,8 @@ export function InvitationViewPage() {
   };
 
   // 立替取引削除処理（削除前に確認）
-  const handleDeleteTransaction = async (transactionId) => {
+  const handleDeleteTransaction = async (transactionId, e) => {
+    e?.stopPropagation(); // イベントの伝播を停止
     if (isLoading) return;
     setIsLoading(true);
     if (!window.confirm('本当に削除しますか？')) return;
@@ -393,12 +394,11 @@ export function InvitationViewPage() {
   );
 
   return (
-    <div
-      className="min-h-screen bg-gradient-to-br from-purple-100 via-pink-100 to-yellow-100 p-8 sm:p-12"
-      style={{ fontFamily: "'Nunito', sans-serif" }}
-    >
+    <div className="min-h-screen bg-gradient-to-br from-purple-100 via-pink-100 to-yellow-100 px-4 sm:px-6 py-8">
+      {isLoading && <LoadingOverlay />}
+      
       {/* ホームへ戻るボタン */}
-      <div className="mb-4">
+      <div className="max-w-3xl mx-auto mb-4">
         <button
           onClick={() => navigate('/')}
           className="flex items-center text-indigo-800 text-lg focus:outline-none"
@@ -411,10 +411,10 @@ export function InvitationViewPage() {
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="w-full max-w-xl mx-auto bg-white border border-gray-200 rounded-2xl shadow-md hover:shadow-xl p-8 space-y-12"
+        className="w-full max-w-3xl mx-auto bg-white border border-gray-200 rounded-2xl shadow-md hover:shadow-xl p-6 sm:p-8"
       >
-        {/* ヘッダー：タイトル・日付 */}
-        <div className="text-center pb-8 border-b-2 border-purple-200">
+        {/* タイトルと日付 */}
+        <div className="text-center pb-8">
           <h1 className="text-4xl font-bold text-indigo-800 mb-4 tracking-wide">
             {eventData.title}
           </h1>
@@ -424,14 +424,14 @@ export function InvitationViewPage() {
         </div>
 
         {/* クイックナビゲーション */}
-        <div className="flex justify-center gap-3 mt-1 mb-8 px-4">
+        <div className="flex justify-center gap-4 mb-8 border-b-2 border-purple-200 pb-8">
           <a 
             href="#location" 
             onClick={(e) => {
               e.preventDefault();
-              document.querySelector('#location').scrollIntoView({ behavior: 'smooth' });
+              document.querySelector('#location')?.scrollIntoView({ behavior: 'smooth' });
             }}
-            className="flex items-center space-x-1.5 px-5 py-2 rounded-xl text-gray-600 bg-gradient-to-br from-purple-50 via-pink-50 to-yellow-50 hover:from-purple-100 hover:via-pink-100 hover:to-yellow-100 transition-all whitespace-nowrap"
+            className="flex items-center space-x-1.5 px-4 py-2 rounded-xl text-gray-600 bg-gradient-to-br from-purple-50 via-pink-50 to-yellow-50 hover:from-purple-100 hover:via-pink-100 hover:to-yellow-100 transition-all whitespace-nowrap"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
@@ -444,7 +444,7 @@ export function InvitationViewPage() {
               e.preventDefault();
               document.querySelector('#expenses').scrollIntoView({ behavior: 'smooth' });
             }}
-            className="flex items-center space-x-1.5 px-5 py-2 rounded-xl text-gray-600 bg-gradient-to-br from-purple-50 via-pink-50 to-yellow-50 hover:from-purple-100 hover:via-pink-100 hover:to-yellow-100 transition-all whitespace-nowrap"
+            className="flex items-center space-x-1.5 px-4 py-2 rounded-xl text-gray-600 bg-gradient-to-br from-purple-50 via-pink-50 to-yellow-50 hover:from-purple-100 hover:via-pink-100 hover:to-yellow-100 transition-all whitespace-nowrap"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
@@ -457,7 +457,7 @@ export function InvitationViewPage() {
               e.preventDefault();
               document.querySelector('#transactions').scrollIntoView({ behavior: 'smooth' });
             }}
-            className="flex items-center space-x-1.5 px-5 py-2 rounded-xl text-gray-600 bg-gradient-to-br from-purple-50 via-pink-50 to-yellow-50 hover:from-purple-100 hover:via-pink-100 hover:to-yellow-100 transition-all whitespace-nowrap"
+            className="flex items-center space-x-1.5 px-4 py-2 rounded-xl text-gray-600 bg-gradient-to-br from-purple-50 via-pink-50 to-yellow-50 hover:from-purple-100 hover:via-pink-100 hover:to-yellow-100 transition-all whitespace-nowrap"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
@@ -695,12 +695,7 @@ export function InvitationViewPage() {
                             ¥{tx.amount.toLocaleString()}
                           </span>
                           <button
-                            onClick={(e) => {
-                              e.stopPropagation(); // 親要素のクリックイベントを防止
-                              if (window.confirm('この取引を削除してもよろしいですか？')) {
-                                handleDeleteTransaction(tx.id);
-                              }
-                            }}
+                            onClick={(e) => handleDeleteTransaction(tx.id, e)}
                             className="p-1.5 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-full transition-colors"
                             aria-label="削除"
                           >
@@ -895,9 +890,6 @@ export function InvitationViewPage() {
         transaction={selectedTransaction}
         onClose={() => setSelectedTransaction(null)}
       />
-
-      {/* ローディングオーバーレイ */}
-      {isLoading && <LoadingOverlay />}
     </div>
   );
 }
