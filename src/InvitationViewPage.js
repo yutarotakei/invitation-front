@@ -34,6 +34,9 @@ export function InvitationViewPage() {
   const [selectedTransaction, setSelectedTransaction] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
+  // 初期ローディング用の状態
+  const [initialLoading, setInitialLoading] = useState(true);
+
   // イベント詳細を取得する関数
   const fetchEvent = async () => {
     setLoading(true);
@@ -58,16 +61,29 @@ export function InvitationViewPage() {
   };
 
   useEffect(() => {
-    fetchEvent();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id]);
+    const fetchData = async () => {
+      setInitialLoading(true);
+      try {
+        const data = await fetchEvent();
+        setEventData(data);
+        // 取引が複数ある場合は精算結果を自動表示
+        if (data?.transactions?.length > 1) {
+          setShowSettlement(true);
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        setError('データの取得に失敗しました');
+      } finally {
+        setInitialLoading(false);
+      }
+    };
+    fetchData();
+  }, [id]); // idが変更されたときのみ実行
 
   // メンバー追加処理
   const handleAddMember = async () => {
-    if (!newMemberName.trim()) {
-      alert('名前を入力してください');
-      return;
-    }
+    if (isLoading) return;
+    setIsLoading(true);
     try {
       const response = await fetch(
         `${process.env.REACT_APP_API_URL || ''}/api/events/${id}/members`,
@@ -83,15 +99,19 @@ export function InvitationViewPage() {
       setNewMemberName('');
       setNewMemberStatus('参加');
       setIsMemberDialogOpen(false);
-      fetchEvent();
+      await fetchEvent();
     } catch (err) {
       console.error(err);
       alert('メンバー追加に失敗しました');
+    } finally {
+      setIsLoading(false);
     }
   };
 
   // メンバーのステータス更新処理
   const handleUpdateMemberStatus = async (memberId, newStatus) => {
+    if (isLoading) return;
+    setIsLoading(true);
     try {
       const response = await fetch(
         `${process.env.REACT_APP_API_URL || ''}/api/events/${id}/members/${memberId}`,
@@ -105,10 +125,12 @@ export function InvitationViewPage() {
         throw new Error('メンバー更新に失敗しました');
       }
       setIsEditMemberDialogOpen(false);
-      fetchEvent();
+      await fetchEvent();
     } catch (err) {
       console.error(err);
       alert('メンバー更新に失敗しました');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -135,15 +157,6 @@ export function InvitationViewPage() {
     if (isLoading) return;
     setIsLoading(true);
     try {
-      if (
-        !newTransDescription.trim() ||
-        !newTransPayer ||
-        !newTransAmount ||
-        newTransBeneficiaries.length === 0
-      ) {
-        alert('全ての項目を入力してください');
-        return;
-      }
       const response = await fetch(
         `${process.env.REACT_APP_API_URL || ''}/api/events/${id}/transactions`,
         {
@@ -164,7 +177,11 @@ export function InvitationViewPage() {
       setNewTransAmount('');
       setNewTransBeneficiaries([]);
       setShowSettlement(false);
-      fetchEvent();
+      await fetchEvent();
+      // 取引追加後に取引一覧までスクロール
+      setTimeout(() => {
+        document.querySelector('#transactions')?.scrollIntoView({ behavior: 'smooth' });
+      }, 100);
     } catch (err) {
       console.error('Error:', err);
       alert('立替取引の追加に失敗しました');
@@ -358,7 +375,17 @@ export function InvitationViewPage() {
     </div>
   );
 
-  if (loading) return <div>読み込み中…</div>;
+  // 初期ローディング用コンポーネント
+  const InitialLoadingOverlay = () => (
+    <div className="min-h-screen bg-gradient-to-br from-purple-100 via-pink-100 to-yellow-100 flex items-center justify-center">
+      <div className="bg-white rounded-2xl shadow-lg p-8 space-y-4">
+        <div className="animate-spin rounded-full h-12 w-12 border-4 border-purple-500 border-t-transparent mx-auto"></div>
+      </div>
+    </div>
+  );
+
+  // メインレンダリング
+  if (initialLoading) return <InitialLoadingOverlay />;
   if (error) return <div>{error}</div>;
   if (!eventData) return <div>イベントが見つかりません</div>;
 
