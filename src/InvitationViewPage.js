@@ -483,46 +483,79 @@ export function InvitationViewPage() {
         </div>
 
         {/* クイックナビゲーション */}
-        <div className="flex justify-center gap-4 mb-8 border-b-2 border-purple-200 pb-8">
-          <a 
-            href="#location" 
-            onClick={(e) => {
-              e.preventDefault();
-              document.querySelector('#location')?.scrollIntoView({ behavior: 'smooth' });
-            }}
-            className="flex items-center space-x-1.5 px-4 py-2 rounded-xl text-gray-600 bg-gradient-to-br from-purple-50 via-pink-50 to-yellow-50 hover:from-purple-100 hover:via-pink-100 hover:to-yellow-100 transition-all whitespace-nowrap"
-          >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-            </svg>
-            <span className="text-sm font-medium">場所</span>
-          </a>
-          <a 
-            href="#expenses" 
-            onClick={(e) => {
-              e.preventDefault();
-              document.querySelector('#expenses').scrollIntoView({ behavior: 'smooth' });
-            }}
-            className="flex items-center space-x-1.5 px-4 py-2 rounded-xl text-gray-600 bg-gradient-to-br from-purple-50 via-pink-50 to-yellow-50 hover:from-purple-100 hover:via-pink-100 hover:to-yellow-100 transition-all whitespace-nowrap"
-          >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-            </svg>
-            <span className="text-sm font-medium">立替登録</span>
-          </a>
-          <a 
-            href="#transactions" 
-            onClick={(e) => {
-              e.preventDefault();
-              document.querySelector('#transactions').scrollIntoView({ behavior: 'smooth' });
-            }}
-            className="flex items-center space-x-1.5 px-4 py-2 rounded-xl text-gray-600 bg-gradient-to-br from-purple-50 via-pink-50 to-yellow-50 hover:from-purple-100 hover:via-pink-100 hover:to-yellow-100 transition-all whitespace-nowrap"
-          >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-            </svg>
-            <span className="text-sm font-medium">取引一覧</span>
-          </a>
+        <div className="flex flex-col items-center gap-4 mb-8 border-b-2 border-purple-200 pb-8">
+          {/* 1行目: メンバー、場所 */}
+          <div className="flex justify-center gap-4">
+            <a 
+              href="#members" 
+              onClick={(e) => {
+                e.preventDefault();
+                document.querySelector('#members')?.scrollIntoView({ behavior: 'smooth' });
+              }}
+              className="flex items-center space-x-1.5 px-4 py-2 rounded-xl text-gray-600 bg-gradient-to-br from-purple-50 via-pink-50 to-yellow-50 hover:from-purple-100 hover:via-pink-100 hover:to-yellow-100 transition-all whitespace-nowrap"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+              </svg>
+              <span className="text-sm font-medium">メンバー</span>
+            </a>
+            <a 
+              href="#location" 
+              onClick={(e) => {
+                e.preventDefault();
+                document.querySelector('#location')?.scrollIntoView({ behavior: 'smooth' });
+              }}
+              className="flex items-center space-x-1.5 px-4 py-2 rounded-xl text-gray-600 bg-gradient-to-br from-purple-50 via-pink-50 to-yellow-50 hover:from-purple-100 hover:via-pink-100 hover:to-yellow-100 transition-all whitespace-nowrap"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+              </svg>
+              <span className="text-sm font-medium">場所</span>
+            </a>
+          </div>
+          
+          {/* 2行目: 立替登録、取引一覧、精算結果 */}
+          <div className="flex justify-center gap-4">
+            <a 
+              href="#expenses" 
+              onClick={(e) => {
+                e.preventDefault();
+                document.querySelector('#expenses')?.scrollIntoView({ behavior: 'smooth' });
+              }}
+              className="flex items-center space-x-1.5 px-4 py-2 rounded-xl text-gray-600 bg-gradient-to-br from-purple-50 via-pink-50 to-yellow-50 hover:from-purple-100 hover:via-pink-100 hover:to-yellow-100 transition-all whitespace-nowrap"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+              </svg>
+              <span className="text-sm font-medium">支払いを記録</span>
+            </a>
+            <a 
+              href="#transactions" 
+              onClick={(e) => {
+                e.preventDefault();
+                document.querySelector('#transactions')?.scrollIntoView({ behavior: 'smooth' });
+              }}
+              className="flex items-center space-x-1.5 px-4 py-2 rounded-xl text-gray-600 bg-gradient-to-br from-purple-50 via-pink-50 to-yellow-50 hover:from-purple-100 hover:via-pink-100 hover:to-yellow-100 transition-all whitespace-nowrap"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+              </svg>
+              <span className="text-sm font-medium">支払い履歴</span>
+            </a>
+            <a 
+              href="#settlement" 
+              onClick={(e) => {
+                e.preventDefault();
+                document.querySelector('#settlement')?.scrollIntoView({ behavior: 'smooth' });
+              }}
+              className="flex items-center space-x-1.5 px-4 py-2 rounded-xl text-gray-600 bg-gradient-to-br from-purple-50 via-pink-50 to-yellow-50 hover:from-purple-100 hover:via-pink-100 hover:to-yellow-100 transition-all whitespace-nowrap"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+              </svg>
+              <span className="text-sm font-medium">精算結果</span>
+            </a>
+          </div>
         </div>
 
         {/* メンバーセクション */}
@@ -625,12 +658,12 @@ export function InvitationViewPage() {
         {/* 立替登録セクション */}
         <div id="expenses" className="space-y-6 mt-16">
           <h2 className="text-3xl font-semibold text-purple-800 text-center">
-            立替を登録する
+            支払いを記録する
           </h2>
           <div className="bg-gray-50 border border-gray-200 rounded-2xl shadow-md hover:shadow-xl p-8 space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="flex flex-col space-y-2">
-                <label className="text-lg text-gray-700">何代</label>
+                <label className="text-lg text-gray-700">何に使いましたか？</label>
                 <input
                   type="text"
                   value={newTransDescription}
@@ -640,7 +673,7 @@ export function InvitationViewPage() {
                 />
               </div>
               <div className="space-y-2">
-                <label className="block text-sm font-medium text-gray-700">
+                <label className="block text-lg font-medium text-gray-700">
                   誰が
                 </label>
                 <select
@@ -658,7 +691,7 @@ export function InvitationViewPage() {
               </div>
             </div>
             <div className="flex justify-between items-center mb-2">
-              <label className="text-lg text-gray-700">誰の分の</label>
+              <label className="text-lg text-gray-700">誰の分を</label>
               <button
                 onClick={() => {
                   const allNames = displayedMembers.map(member => member.name);
