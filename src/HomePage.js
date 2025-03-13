@@ -64,7 +64,7 @@ export function HomePage() {
           ))}
         </motion.div>
         
-        {/* CTA Button - MOVED UP */}
+        {/* CTA Button */}
         <motion.div
           className="text-center mb-12"
           initial={{ opacity: 0, scale: 0.8 }}
@@ -81,11 +81,11 @@ export function HomePage() {
           >
             <motion.span
               initial={false}
-              animate={{ x: isHovered ? 10 : 7 }}
+              animate={{ x: isHovered ? 10 : 0 }}
               transition={{ type: "spring", stiffness: 300 }}
               className="relative z-10 flex items-center justify-center w-full"
             >
-              <span className="flex items-center justify-center">
+              <span className="flex items-center justify-center pl-4">
                 イベントを作成！
                 <motion.span
                   initial={false}
