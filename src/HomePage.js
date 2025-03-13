@@ -85,7 +85,7 @@ export function HomePage() {
               transition={{ type: "spring", stiffness: 300 }}
               className="relative z-10 flex items-center justify-center w-full"
             >
-              <span className="flex items-center justify-center pl-4">
+              <span className="flex items-center justify-center pl-6">
                 イベントを作成！
                 <motion.span
                   initial={false}
