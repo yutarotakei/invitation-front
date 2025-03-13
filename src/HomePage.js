@@ -49,7 +49,7 @@ export function HomePage() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5, duration: 0.6 }}
-          className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12"
+          className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8"
         >
           {features.map((feature, index) => (
             <motion.div
@@ -62,6 +62,43 @@ export function HomePage() {
               <div className="font-semibold text-gray-800">{feature.text}</div>
             </motion.div>
           ))}
+        </motion.div>
+        
+        {/* CTA Button - MOVED UP */}
+        <motion.div
+          className="text-center mb-12"
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 0.6, duration: 0.5 }}
+        >
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+            onClick={() => navigate('/create')}
+            className="relative bg-gradient-to-r from-teal-400 to-blue-500 text-white px-12 py-5 rounded-full text-2xl font-bold shadow-lg hover:shadow-xl transition overflow-hidden"
+          >
+            <motion.span
+              initial={false}
+              animate={{ x: isHovered ? 10 : 0 }}
+              transition={{ type: "spring", stiffness: 300 }}
+              className="relative z-10 flex items-center justify-center w-full"
+            >
+              <span className="flex items-center justify-center">
+                イベントを作成！
+                <motion.span
+                  initial={false}
+                  animate={{ x: isHovered ? 5 : 0, opacity: isHovered ? 1 : 0 }}
+                  transition={{ type: "spring", stiffness: 300 }}
+                  className="ml-2"
+                >
+                  →
+                </motion.span>
+              </span>
+            </motion.span>
+          </motion.button>
+          <p className="mt-4 text-gray-600">完全無料でご利用いただけます</p>
         </motion.div>
 
         {/* How to Use Section - NEW */}
@@ -313,40 +350,7 @@ export function HomePage() {
           </div>
         </motion.div>
 
-        {/* CTA Button */}
-        <motion.div
-          className="text-center"
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.9, duration: 0.5 }}
-        >
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
-            onClick={() => navigate('/create')}
-            className="relative bg-gradient-to-r from-teal-400 to-blue-500 text-white px-12 py-5 rounded-full text-2xl font-bold shadow-lg hover:shadow-xl transition overflow-hidden"
-          >
-            <motion.span
-              initial={false}
-              animate={{ x: isHovered ? 10 : 0 }}
-              transition={{ type: "spring", stiffness: 300 }}
-              className="relative z-10 flex items-center justify-center"
-            >
-              イベントを作成！
-              <motion.span
-                initial={false}
-                animate={{ x: isHovered ? 5 : 0, opacity: isHovered ? 1 : 0 }}
-                transition={{ type: "spring", stiffness: 300 }}
-                className="ml-2"
-              >
-                →
-              </motion.span>
-            </motion.span>
-          </motion.button>
-          <p className="mt-4 text-gray-600">完全無料でご利用いただけます</p>
-        </motion.div>
+        {/* CTA Button - SECOND INSTANCE REMOVED */}
       </div>
     </div>
   );
