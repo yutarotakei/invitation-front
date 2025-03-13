@@ -81,7 +81,7 @@ export function HomePage() {
           >
             <motion.span
               initial={false}
-              animate={{ x: isHovered ? 10 : 5 }}
+              animate={{ x: isHovered ? 10 : 7 }}
               transition={{ type: "spring", stiffness: 300 }}
               className="relative z-10 flex items-center justify-center w-full"
             >
