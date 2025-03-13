@@ -515,7 +515,7 @@ export function InvitationViewPage() {
           </div>
           
           {/* 2行目: 立替登録、取引一覧、精算結果 */}
-          <div className="flex justify-center gap-4">
+          <div className="flex justify-center gap-3">
             <a 
               href="#expenses" 
               onClick={(e) => {
