@@ -350,11 +350,27 @@ export function InvitationViewPage() {
         .join('\n')
     : '全員清算済みです';
 
-  // 精算結果をクリップボードにコピーする処理
-  const handleCopySettlement = () => {
-    navigator.clipboard.writeText(settlementText).then(() => {
+  // 精算結果をクリップボードにコピーする処理を改善
+  const handleCopySettlement = async () => {
+    try {
+      await navigator.clipboard.writeText(settlementText);
       alert('精算結果をコピーしました');
-    });
+    } catch (err) {
+      console.error('Copy failed:', err);
+      // フォールバックとして古い方法を試す
+      const textArea = document.createElement('textarea');
+      textArea.value = settlementText;
+      document.body.appendChild(textArea);
+      textArea.select();
+      try {
+        document.execCommand('copy');
+        alert('精算結果をコピーしました');
+      } catch (err) {
+        console.error('Fallback copy failed:', err);
+        alert('コピーに失敗しました');
+      }
+      document.body.removeChild(textArea);
+    }
   };
 
   // 取引詳細モーダル
@@ -523,45 +539,41 @@ export function InvitationViewPage() {
             </button>
           </div>
           {/* グリッド表示：モバイルの場合、1行2列表示 */}
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
             {sortedMembers.map((member) => (
               <div
                 key={member.id}
-                // 幹事は編集不可
-                onClick={member.id !== 'organizer' ? () => {
-                  setEditingMember(member);
-                  setIsEditMemberDialogOpen(true);
-                } : undefined}
-                className="transform transition-all duration-200 hover:scale-102 hover:-translate-y-1 cursor-pointer"
-              >
-                <div className={`flex items-center rounded-2xl shadow px-2 py-2.5 border 
-                  ${member.status === '参加'
-                    ? 'bg-white border-green-200'
+                onClick={() => {
+                  if (member.id !== 'organizer') {
+                    setEditingMember(member);
+                    setIsEditMemberDialogOpen(true);
+                  }
+                }}
+                className={`p-3 rounded-xl border ${
+                  member.status === '参加'
+                    ? 'bg-green-50 border-green-200'
                     : member.status === '不参加'
-                    ? 'bg-white border-red-200'
-                    : 'bg-white border-yellow-200'
-                  }`}
-                >
-                  <div className="relative flex-shrink-0">
-                    <div className={`absolute -top-1 -right-1 w-3 h-3 rounded-full z-20
-                      ${member.status === '参加'
-                        ? 'bg-green-400'
-                        : member.status === '不参加'
-                        ? 'bg-red-400'
-                        : 'bg-yellow-400'
-                      } shadow-sm`}
-                    ></div>
-                    <div className="w-8 h-8 rounded-xl shadow bg-gradient-to-br from-indigo-500 to-indigo-700 flex items-center justify-center text-white">
-                      <span className="text-lg font-bold">{member.name.charAt(0)}</span>
-                    </div>
-                  </div>
-                  <div className="flex-1 pl-2 overflow-hidden">
-                    <p className="font-medium text-sm tracking-wide text-gray-800 whitespace-nowrap overflow-hidden truncate">
-                      {member.name.length > 5 ? `${member.name.slice(0, 5)}...` : member.name}
-                    </p>
+                    ? 'bg-red-50 border-red-200'
+                    : 'bg-yellow-50 border-yellow-200'
+                } ${
+                  member.id !== 'organizer' ? 'cursor-pointer hover:shadow-md' : ''
+                } transition-all`}
+              >
+                <div className="text-center">
+                  <div className={`text-gray-800 mb-1 truncate ${member.id === 'organizer' ? 'font-bold' : 'font-medium'}`}>
+                    {member.name}
                     {member.id === 'organizer' && (
-                      <span className="text-xs text-gray-500">幹事</span>
+                      <span className="text-xs text-gray-500 ml-1">(幹事)</span>
                     )}
+                  </div>
+                  <div className={`text-sm ${
+                    member.status === '参加'
+                      ? 'text-green-600'
+                      : member.status === '不参加'
+                      ? 'text-red-600'
+                      : 'text-yellow-600'
+                  }`}>
+                    {member.status}
                   </div>
                 </div>
               </div>
@@ -757,49 +769,37 @@ export function InvitationViewPage() {
                   </li>
                 ))}
               </ul>
-            </div>
-          )}
 
-          {/* 精算計算ボタン
-          {eventData.transactions && eventData.transactions.length >= 2 && (
-            <div className="flex justify-center">
-              <button
-                onClick={() => setShowSettlement(true)}
-                className="mt-6 bg-gradient-to-r from-purple-500 to-pink-600 text-white px-8 py-4 rounded-full text-2xl hover:opacity-90 transition"
-              >
-                精算を計算する！
-              </button>
-            </div>
-          )} */}
-
-          {/* 清算結果 */}
-          {showSettlement && (
-            <div className="bg-white border border-gray-200 rounded-2xl shadow-md p-8 mx-[-1rem]">
-              <h3 className="text-center text-2xl font-semibold mb-6 text-purple-800">
-                清算結果
-              </h3>
-              <div className="space-y-4">
-                {settlementResult.settlements.map((settlement, index) => (
-                  <div key={index} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg mx-[-0.5rem]">
-                    <div className="flex items-center space-x-3">
-                      <span className="font-medium text-gray-700">{settlement.from}</span>
-                      <svg className="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                      </svg>
-                      <span className="font-medium text-gray-700">{settlement.to}</span>
-                    </div>
-                    <span className="text-lg font-bold text-indigo-600">
-                      ¥{settlement.amount.toLocaleString()}
-                    </span>
+              {/* 精算結果を直接表示（ボタンは削除） */}
+              {eventData.transactions.length >= 2 && (
+                <div className="bg-white border border-gray-200 rounded-2xl shadow-md p-8 mx-[-1rem]">
+                  <h3 className="text-center text-2xl font-semibold mb-6 text-purple-800">
+                    清算結果
+                  </h3>
+                  <div className="space-y-4">
+                    {settlementResult.settlements.map((settlement, index) => (
+                      <div key={index} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg mx-[-0.5rem]">
+                        <div className="flex items-center space-x-3">
+                          <span className="font-medium text-gray-700">{settlement.from}</span>
+                          <svg className="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                          </svg>
+                          <span className="font-medium text-gray-700">{settlement.to}</span>
+                        </div>
+                        <span className="text-lg font-bold text-indigo-600">
+                          ¥{settlement.amount.toLocaleString()}
+                        </span>
+                      </div>
+                    ))}
                   </div>
-                ))}
-              </div>
-              <button
-                onClick={handleCopySettlement}
-                className="mt-6 w-full bg-gray-100 text-gray-700 px-4 py-2 rounded-full hover:bg-gray-200 transition"
-              >
-                結果をコピー
-              </button>
+                  <button
+                    onClick={handleCopySettlement}
+                    className="mt-6 w-full bg-gray-100 text-gray-700 px-4 py-2 rounded-full hover:bg-gray-200 transition"
+                  >
+                    結果をコピー
+                  </button>
+                </div>
+              )}
             </div>
           )}
         </div>
