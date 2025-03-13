@@ -514,8 +514,8 @@ export function InvitationViewPage() {
             </a>
           </div>
           
-          {/* 2行目: 立替登録、取引一覧、精算結果 */}
-          <div className="flex justify-center gap-3">
+          {/* 2行目: 支払い記録、支払い履歴、精算結果 */}
+          <div className="flex justify-center gap-4">
             <a 
               href="#expenses" 
               onClick={(e) => {
@@ -543,10 +543,10 @@ export function InvitationViewPage() {
               <span className="text-sm font-medium">支払い履歴</span>
             </a>
             <a 
-              href="#settlement" 
+              href="#settlement-results" 
               onClick={(e) => {
                 e.preventDefault();
-                document.querySelector('#settlement')?.scrollIntoView({ behavior: 'smooth' });
+                document.querySelector('#settlement-results')?.scrollIntoView({ behavior: 'smooth' });
               }}
               className="flex items-center space-x-1.5 px-4 py-2 rounded-xl text-gray-600 bg-gradient-to-br from-purple-50 via-pink-50 to-yellow-50 hover:from-purple-100 hover:via-pink-100 hover:to-yellow-100 transition-all whitespace-nowrap"
             >
@@ -756,7 +756,7 @@ export function InvitationViewPage() {
           {eventData.transactions && eventData.transactions.length > 0 && (
             <div className="space-y-6" id="transactions">
               <h3 className="text-2xl font-semibold text-purple-800 text-center">
-                取引一覧
+                支払い履歴
               </h3>
               <ul className="space-y-4">
                 {eventData.transactions.map((tx) => (
@@ -803,9 +803,9 @@ export function InvitationViewPage() {
                 ))}
               </ul>
 
-              {/* 精算結果を直接表示（ボタンは削除） */}
+              {/* 精算結果セクション */}
               {eventData.transactions.length >= 2 && (
-                <div className="bg-white border border-gray-200 rounded-2xl shadow-md p-8 mx-[-1rem]">
+                <div id="settlement-results" className="bg-white border border-gray-200 rounded-2xl shadow-md p-8 mx-[-1rem]">
                   <h3 className="text-center text-2xl font-semibold mb-6 text-purple-800">
                     清算結果
                   </h3>
