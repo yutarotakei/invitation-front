@@ -86,7 +86,7 @@ export function HomePage() {
               className="relative z-10 flex items-center justify-center w-full"
             >
               <span className="flex items-center justify-center">
-              イベントを作成！
+                イベントを作成！
                 <motion.span
                   initial={false}
                   animate={{ x: isHovered ? 5 : 0, opacity: isHovered ? 1 : 0 }}
