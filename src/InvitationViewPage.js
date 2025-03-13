@@ -760,7 +760,7 @@ export function InvitationViewPage() {
             </div>
           )}
 
-          {/* 精算計算ボタン */}
+          {/* 精算計算ボタン
           {eventData.transactions && eventData.transactions.length >= 2 && (
             <div className="flex justify-center">
               <button
@@ -770,7 +770,7 @@ export function InvitationViewPage() {
                 精算を計算する！
               </button>
             </div>
-          )}
+          )} */}
 
           {/* 清算結果 */}
           {showSettlement && (
