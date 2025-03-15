@@ -462,7 +462,7 @@ export function InvitationViewPage() {
           onClick={() => navigate('/')}
           className="flex items-center text-indigo-800 text-lg focus:outline-none"
         >
-          &larr; ホームへ
+          &larr; 新しいイベントを作る！
         </button>
       </div>
 
@@ -568,7 +568,7 @@ export function InvitationViewPage() {
               onClick={() => setIsMemberDialogOpen(true)}
               className="bg-gradient-to-r from-pink-500 to-purple-600 text-white px-8 py-3 rounded-full shadow hover:opacity-90 transition"
             >
-              メンバーを追加
+              参加する！
             </button>
           </div>
           {/* グリッド表示：モバイルの場合、1行2列表示 */}
