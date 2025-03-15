@@ -343,33 +343,48 @@ export function InvitationViewPage() {
   // 精算結果（「精算を計算する！」ボタン押下時に利用）
   const settlementResult = computeSettlement();
 
-  // 清算結果のテキスト（コピー用）
-  const settlementText = settlementResult.settlements && settlementResult.settlements.length > 0
-    ? settlementResult.settlements
-        .map((s) => `${s.from} → ${s.to} : ¥${s.amount}`)
-        .join('\n')
-    : '全員清算済みです';
+  // 清算結果のテキスト（コピー用）を生成する関数
+  const getSettlementText = () => {
+    if (!settlementResult.settlements || settlementResult.settlements.length === 0) {
+      return '全員清算済みです';
+    }
+    return settlementResult.settlements
+      .map((s) => `${s.from} → ${s.to} : ¥${s.amount.toLocaleString()}`)
+      .join('\n');
+  };
 
   // 精算結果をクリップボードにコピーする処理を改善
   const handleCopySettlement = async () => {
+    const textToCopy = getSettlementText();
+    
     try {
-      await navigator.clipboard.writeText(settlementText);
+      // モダンなClipboard APIを使用
+      await navigator.clipboard.writeText(textToCopy);
       alert('精算結果をコピーしました');
     } catch (err) {
-      console.error('Copy failed:', err);
-      // フォールバックとして古い方法を試す
-      const textArea = document.createElement('textarea');
-      textArea.value = settlementText;
-      document.body.appendChild(textArea);
-      textArea.select();
+      console.error('Modern copy failed:', err);
       try {
-        document.execCommand('copy');
-        alert('精算結果をコピーしました');
-      } catch (err) {
-        console.error('Fallback copy failed:', err);
+        // フォールバック: document.execCommandを使用
+        const textArea = document.createElement('textarea');
+        textArea.value = textToCopy;
+        textArea.style.position = 'fixed';  // スクロールを防ぐ
+        textArea.style.opacity = '0';       // 非表示にする
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        
+        const successful = document.execCommand('copy');
+        document.body.removeChild(textArea);
+        
+        if (successful) {
+          alert('精算結果をコピーしました');
+        } else {
+          throw new Error('Fallback copy failed');
+        }
+      } catch (fallbackErr) {
+        console.error('Fallback copy failed:', fallbackErr);
         alert('コピーに失敗しました');
       }
-      document.body.removeChild(textArea);
     }
   };
 
@@ -627,7 +642,7 @@ export function InvitationViewPage() {
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
               </svg>
-              <span>メンバーを追加</span>
+              <span>参加する！</span>
             </button>
           </div>
           
