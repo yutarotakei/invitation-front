@@ -898,56 +898,61 @@ export function InvitationViewPage() {
         onClose={() => setIsMemberDialogOpen(false)}
         className="fixed inset-0 z-50 overflow-y-auto"
       >
-        <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-          <div className="sm:flex sm:items-start">
-            <div className="mt-3 text-center sm:mt-0 sm:text-left w-full">
-              <h3 className="text-lg leading-6 font-medium text-gray-900">
-                メンバーとして参加
-              </h3>
-              <div className="mt-2 space-y-4">
-                <div>
-                  <input
-                    type="text"
-                    value={newMemberName}
-                    onChange={(e) => setNewMemberName(e.target.value)}
-                    placeholder="名前を入力"
-                    className="w-full border border-gray-300 rounded-md px-3 py-2"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    参加ステータス
-                  </label>
-                  <select
-                    value={newMemberStatus}
-                    onChange={(e) => setNewMemberStatus(e.target.value)}
-                    className="w-full border border-gray-300 rounded-md px-3 py-2"
-                  >
-                    <option value="参加">参加</option>
-                    <option value="不参加">不参加</option>
-                    <option value="未定">未定</option>
-                  </select>
-                  <p className="mt-2 text-sm text-gray-500 italic">
-                    ※ステータスはあとから変更できます
-                  </p>
+        <div className="min-h-screen px-4 text-center">
+          <Dialog.Overlay className="fixed inset-0 bg-black opacity-30" />
+          <div className="inline-block align-middle bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+            <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+              <div className="sm:flex sm:items-start">
+                <div className="mt-3 text-center sm:mt-0 sm:text-left w-full">
+                  <h3 className="text-lg leading-6 font-medium text-gray-900">
+                    メンバーとして参加
+                  </h3>
+                  <div className="mt-2 space-y-4">
+                    <div>
+                      <input
+                        type="text"
+                        value={newMemberName}
+                        onChange={(e) => setNewMemberName(e.target.value)}
+                        placeholder="名前を入力"
+                        className="w-full border border-gray-300 rounded-md px-3 py-2"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        参加ステータス
+                      </label>
+                      <select
+                        value={newMemberStatus}
+                        onChange={(e) => setNewMemberStatus(e.target.value)}
+                        className="w-full border border-gray-300 rounded-md px-3 py-2"
+                      >
+                        <option value="参加">参加</option>
+                        <option value="不参加">不参加</option>
+                        <option value="未定">未定</option>
+                      </select>
+                      <p className="mt-2 text-sm text-gray-500 italic">
+                        ※ステータスはあとから変更できます
+                      </p>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
+            <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+              <button
+                onClick={handleAddMember}
+                className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-gradient-to-r from-pink-500 to-purple-600 text-base font-medium text-white hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 sm:ml-3 sm:w-auto sm:text-sm"
+              >
+                追加
+              </button>
+              <button
+                onClick={() => setIsMemberDialogOpen(false)}
+                className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
+              >
+                キャンセル
+              </button>
+            </div>
           </div>
-        </div>
-        <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-          <button
-            onClick={handleAddMember}
-            className="w-full bg-gradient-to-r from-pink-500 to-purple-600 text-white px-6 py-3 rounded-full text-xl hover:opacity-90 transition"
-          >
-            追加
-          </button>
-          <button
-            onClick={() => setIsMemberDialogOpen(false)}
-            className="w-full bg-gray-200 text-gray-700 px-6 py-3 rounded-full text-xl hover:bg-gray-300 transition"
-          >
-            キャンセル
-          </button>
         </div>
       </Dialog>
 
