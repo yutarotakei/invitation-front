@@ -494,409 +494,420 @@ export function InvitationViewPage() {
     <div className="min-h-screen bg-gradient-to-br from-purple-100 via-pink-100 to-yellow-100 px-4 sm:px-6 py-8">
       {isLoading && <LoadingOverlay />}
       
-      {/* ホームへ戻るボタン */}
-      <div className="max-w-3xl mx-auto mb-4">
+      {/* ホームへ戻るボタン - デスクトップではより広いコンテナ */}
+      <div className="max-w-3xl lg:max-w-6xl mx-auto mb-4">
         <button
           onClick={() => navigate('/')}
-          className="flex items-center text-indigo-800 text-lg focus:outline-none"
+          className="flex items-center text-indigo-800 text-lg focus:outline-none hover:text-indigo-600 transition-colors"
         >
           &larr; ホームへ
         </button>
       </div>
 
-      <motion.div
-        initial={{ opacity: 0, y: 50 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="w-full max-w-3xl mx-auto bg-white border border-gray-200 rounded-2xl shadow-md hover:shadow-xl p-6 sm:p-8"
-      >
-        {/* タイトルと日付 */}
-        <div className="text-center pb-8">
-          <h1 className="text-4xl font-bold text-indigo-800 mb-4 tracking-wide">
-            {eventData.title}
-          </h1>
-          <p className="text-2xl font-medium text-gray-600">
-            {eventData.eventDate}
-          </p>
-        </div>
-
-        {/* クイックナビゲーション */}
-        <div className="flex flex-col items-center gap-4 mb-8 border-b-2 border-purple-200 pb-8">
-          {/* 1行目: メンバー、場所 */}
-          <div className="flex justify-center gap-4">
-            <a 
-              href="#members" 
-              onClick={(e) => {
-                e.preventDefault();
-                document.querySelector('#members')?.scrollIntoView({ behavior: 'smooth' });
-              }}
-              className="flex items-center space-x-1.5 px-4 py-2 rounded-xl text-gray-600 bg-gradient-to-br from-purple-50 via-pink-50 to-yellow-50 hover:from-purple-100 hover:via-pink-100 hover:to-yellow-100 transition-all whitespace-nowrap"
-            >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-              </svg>
-              <span className="text-sm font-medium">メンバー</span>
-            </a>
-            <a 
-              href="#location" 
-              onClick={(e) => {
-                e.preventDefault();
-                document.querySelector('#location')?.scrollIntoView({ behavior: 'smooth' });
-              }}
-              className="flex items-center space-x-1.5 px-4 py-2 rounded-xl text-gray-600 bg-gradient-to-br from-purple-50 via-pink-50 to-yellow-50 hover:from-purple-100 hover:via-pink-100 hover:to-yellow-100 transition-all whitespace-nowrap"
-            >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-              </svg>
-              <span className="text-sm font-medium">場所</span>
-            </a>
-          </div>
-          
-          {/* 2行目: 支払い記録、支払い履歴、精算結果 */}
-          <div className="flex justify-center gap-4">
-            <a 
-              href="#expenses" 
-              onClick={(e) => {
-                e.preventDefault();
-                document.querySelector('#expenses')?.scrollIntoView({ behavior: 'smooth' });
-              }}
-              className="flex items-center space-x-1.5 px-4 py-2 rounded-xl text-gray-600 bg-gradient-to-br from-purple-50 via-pink-50 to-yellow-50 hover:from-purple-100 hover:via-pink-100 hover:to-yellow-100 transition-all whitespace-nowrap"
-            >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-              </svg>
-              <span className="text-sm font-medium">支払いを記録</span>
-            </a>
-            <a 
-              href="#transactions" 
-              onClick={(e) => {
-                e.preventDefault();
-                document.querySelector('#transactions')?.scrollIntoView({ behavior: 'smooth' });
-              }}
-              className="flex items-center space-x-1.5 px-4 py-2 rounded-xl text-gray-600 bg-gradient-to-br from-purple-50 via-pink-50 to-yellow-50 hover:from-purple-100 hover:via-pink-100 hover:to-yellow-100 transition-all whitespace-nowrap"
-            >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-              </svg>
-              <span className="text-sm font-medium">支払い履歴</span>
-            </a>
-            <a 
-              href="#settlement-results" 
-              onClick={(e) => {
-                e.preventDefault();
-                document.querySelector('#settlement-results')?.scrollIntoView({ behavior: 'smooth' });
-              }}
-              className="flex items-center space-x-1.5 px-4 py-2 rounded-xl text-gray-600 bg-gradient-to-br from-purple-50 via-pink-50 to-yellow-50 hover:from-purple-100 hover:via-pink-100 hover:to-yellow-100 transition-all whitespace-nowrap"
-            >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
-              </svg>
-              <span className="text-sm font-medium">精算結果</span>
-            </a>
-          </div>
-        </div>
-
-        {/* メンバーセクション */}
-        <div className="space-y-8 mt-12" id="members">
-          <div className="text-center space-y-4">
-            <h2 className="text-3xl font-semibold text-purple-800">
-              メンバー
-            </h2>
-            <div className="flex justify-center gap-8">
-              <div className="text-center">
-                <span className="text-green-600 font-bold text-xl">{getMemberCounts().参加}</span>
-                <p className="text-sm text-gray-600">参加</p>
-              </div>
-              <div className="text-center">
-                <span className="text-red-600 font-bold text-xl">{getMemberCounts().不参加}</span>
-                <p className="text-sm text-gray-600">不参加</p>
-              </div>
-              <div className="text-center">
-                <span className="text-yellow-600 font-bold text-xl">{getMemberCounts().未定}</span>
-                <p className="text-sm text-gray-600">未定</p>
-              </div>
+      {/* デスクトップでは2カラムレイアウト */}
+      <div className="lg:grid lg:grid-cols-12 lg:gap-8 w-full max-w-3xl lg:max-w-6xl mx-auto">
+        {/* メインコンテンツ - デスクトップでは8カラム */}
+        <div className="lg:col-span-8">
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="w-full bg-white border border-gray-200 rounded-2xl shadow-md hover:shadow-xl p-6 sm:p-8 mb-8"
+          >
+            {/* タイトルと日付 */}
+            <div className="text-center pb-8">
+              <h1 className="text-4xl font-bold text-indigo-800 mb-4 tracking-wide">
+                {eventData.title}
+              </h1>
+              <p className="text-2xl font-medium text-gray-600">
+                {eventData.eventDate}
+              </p>
             </div>
-          </div>
-          
-          {/* 既存のメンバー追加ボタンとメンバーリスト */}
-          <div className="flex justify-center">
-            <button
-              onClick={() => setIsMemberDialogOpen(true)}
-              className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-3 rounded-xl font-medium hover:opacity-90 transition-all flex items-center space-x-2"
-            >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-              </svg>
-              <span>参加する！</span>
-            </button>
-          </div>
-          
-          {/* 既存のメンバーグリッド */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-            {sortedMembers.map((member) => (
-              <div
-                key={member.id}
-                onClick={() => {
-                  if (member.id !== 'organizer') {
-                    setEditingMember(member);
-                    setIsEditMemberDialogOpen(true);
-                  }
-                }}
-                className={`p-3 rounded-xl border ${
-                  member.status === '参加'
-                    ? 'bg-green-50 border-green-200'
-                    : member.status === '不参加'
-                    ? 'bg-red-50 border-red-200'
-                    : 'bg-yellow-50 border-yellow-200'
-                } ${
-                  member.id !== 'organizer' ? 'cursor-pointer hover:shadow-md' : ''
-                } transition-all`}
-              >
-                <div className="text-center">
-                  <div className={`text-gray-800 mb-1 truncate ${member.id === 'organizer' ? 'font-bold' : 'font-medium'}`}>
-                    {member.name}
-                    {member.id === 'organizer' && (
-                      <span className="text-xs text-gray-500 ml-1">(幹事)</span>
-                    )}
-                  </div>
-                  <div className={`text-sm ${
-                    member.status === '参加'
-                      ? 'text-green-600'
-                      : member.status === '不参加'
-                      ? 'text-red-600'
-                      : 'text-yellow-600'
-                  }`}>
-                    {member.status}
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
 
-        {/* 場所＆集合メモセクション */}
-        <div className="space-y-10 mt-16" id="location">
-          <h2 className="text-3xl font-semibold text-purple-800 text-center">
-            場所
-          </h2>
-          {/* 場所テキスト表示 */}
-          {eventData.location && (
-            <p className="text-center text-lg text-gray-700 mb-2">
-              {eventData.location}
-            </p>
-          )}
-          <div className="rounded-xl overflow-hidden shadow-md hover:shadow-xl">
-            {eventData.location ? (
-              <iframe
-                width="100%"
-                height="320"
-                frameBorder="0"
-                style={{ border: 0 }}
-                src={`https://www.google.com/maps/embed/v1/place?key=${process.env.REACT_APP_GOOGLE_MAPS_API_KEY}&q=${encodeURIComponent(
-                  eventData.location
-                )}`}
-                allowFullScreen
-                title="Google Map"
-              ></iframe>
-            ) : (
-              <div className="w-full h-80 bg-gray-200 flex items-center justify-center">
-                <p className="text-gray-600">
-                  地図を表示するには場所を入力してください
-                </p>
-              </div>
-            )}
-            {eventData.meetingMemo && (
-              <div className="p-4 bg-white border-t border-gray-200">
-                <p className="text-sm text-gray-700 text-center">
-                  {eventData.meetingMemo}
-                </p>
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* 立替登録セクション */}
-        <div id="expenses" className="space-y-6 mt-16">
-          <h2 className="text-3xl font-semibold text-purple-800 text-center">
-            支払いを記録する
-          </h2>
-          <div className="bg-gray-50 border border-gray-200 rounded-2xl shadow-md hover:shadow-xl p-8 space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="flex flex-col space-y-2">
-                <label className="text-lg text-gray-700">何に使いましたか？</label>
-                <input
-                  type="text"
-                  value={newTransDescription}
-                  onChange={(e) => setNewTransDescription(e.target.value)}
-                  placeholder="例: タクシー代"
-                  className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:border-indigo-500 transition"
-                />
-              </div>
-              <div className="space-y-2">
-                <label className="block text-lg font-medium text-gray-700">
-                  誰が
-                </label>
-                <select
-                  value={newTransPayer}
-                  onChange={(e) => handlePayerSelect(e.target.value)}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                >
-                  <option value="">選択してください</option>
-                  {displayedMembers.map((member) => (
-                    <option key={member.id} value={member.name}>
-                      {member.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
-            <div className="flex justify-between items-center mb-2">
-              <label className="text-lg text-gray-700">誰の分を</label>
-              <button
-                onClick={() => {
-                  const allNames = displayedMembers.map(member => member.name);
-                  // 全員選択されている場合は全解除、そうでない場合は全選択
-                  if (newTransBeneficiaries.length === allNames.length) {
-                    setNewTransBeneficiaries([]);
-                  } else {
-                    setNewTransBeneficiaries(allNames);
-                  }
+            {/* クイックナビゲーション - デスクトップではより整理されたレイアウト */}
+            <div className="flex flex-col sm:flex-row items-center justify-center flex-wrap gap-4 mb-8 border-b-2 border-purple-200 pb-8">
+              <a 
+                href="#members" 
+                onClick={(e) => {
+                  e.preventDefault();
+                  document.querySelector('#members')?.scrollIntoView({ behavior: 'smooth' });
                 }}
-                className="bg-gradient-to-r from-purple-100 via-pink-100 to-yellow-100 text-gray-700 px-4 py-1.5 rounded-full text-sm font-medium hover:shadow-md transition-all flex items-center space-x-1"
+                className="flex items-center space-x-1.5 px-4 py-2 rounded-xl text-gray-600 bg-gradient-to-br from-purple-50 via-pink-50 to-yellow-50 hover:from-purple-100 hover:via-pink-100 hover:to-yellow-100 transition-all whitespace-nowrap"
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
                 </svg>
-                <span>全員を選択</span>
-              </button>
+                <span className="text-sm font-medium">メンバー</span>
+              </a>
+              <a 
+                href="#location" 
+                onClick={(e) => {
+                  e.preventDefault();
+                  document.querySelector('#location')?.scrollIntoView({ behavior: 'smooth' });
+                }}
+                className="flex items-center space-x-1.5 px-4 py-2 rounded-xl text-gray-600 bg-gradient-to-br from-purple-50 via-pink-50 to-yellow-50 hover:from-purple-100 hover:via-pink-100 hover:to-yellow-100 transition-all whitespace-nowrap"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                </svg>
+                <span className="text-sm font-medium">場所</span>
+              </a>
+              <a 
+                href="#expenses" 
+                onClick={(e) => {
+                  e.preventDefault();
+                  document.querySelector('#expenses')?.scrollIntoView({ behavior: 'smooth' });
+                }}
+                className="flex items-center space-x-1.5 px-4 py-2 rounded-xl text-gray-600 bg-gradient-to-br from-purple-50 via-pink-50 to-yellow-50 hover:from-purple-100 hover:via-pink-100 hover:to-yellow-100 transition-all whitespace-nowrap"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                </svg>
+                <span className="text-sm font-medium">支払いを記録</span>
+              </a>
+              <a 
+                href="#transactions" 
+                onClick={(e) => {
+                  e.preventDefault();
+                  document.querySelector('#transactions')?.scrollIntoView({ behavior: 'smooth' });
+                }}
+                className="flex items-center space-x-1.5 px-4 py-2 rounded-xl text-gray-600 bg-gradient-to-br from-purple-50 via-pink-50 to-yellow-50 hover:from-purple-100 hover:via-pink-100 hover:to-yellow-100 transition-all whitespace-nowrap"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                </svg>
+                <span className="text-sm font-medium">支払い履歴</span>
+              </a>
+              <a 
+                href="#settlement-results" 
+                onClick={(e) => {
+                  e.preventDefault();
+                  document.querySelector('#settlement-results')?.scrollIntoView({ behavior: 'smooth' });
+                }}
+                className="flex items-center space-x-1.5 px-4 py-2 rounded-xl text-gray-600 bg-gradient-to-br from-purple-50 via-pink-50 to-yellow-50 hover:from-purple-100 hover:via-pink-100 hover:to-yellow-100 transition-all whitespace-nowrap"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                </svg>
+                <span className="text-sm font-medium">精算結果</span>
+              </a>
             </div>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-              {displayedMembers.map((member) => (
-                <label
-                  key={member.id}
-                  className={`flex items-center space-x-3 p-3 rounded-xl border ${
-                    newTransBeneficiaries.includes(member.name)
-                      ? 'bg-gradient-to-r from-purple-50 to-pink-50 border-purple-200'
-                      : 'bg-white border-gray-200'
-                  } transition-all cursor-pointer hover:shadow-sm`}
-                >
-                  <input
-                    type="checkbox"
-                    className="form-checkbox h-5 w-5 lg:h-6 lg:w-6 text-purple-600 rounded border-gray-300 focus:ring-purple-500"
-                    checked={newTransBeneficiaries.includes(member.name)}
-                    onChange={() => toggleBeneficiary(member.name)}
-                  />
-                  <span className="font-medium text-gray-700 truncate">
-                    {member.name}
-                  </span>
-                </label>
-              ))}
-            </div>
-            <div className="flex flex-col space-y-2">
-              <label className="text-lg text-gray-700">いくら払った</label>
-              <input
-                type="number"
-                value={newTransAmount}
-                onChange={(e) => setNewTransAmount(e.target.value)}
-                placeholder="例: 5000"
-                className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:border-indigo-500 transition"
-              />
-            </div>
-            <button
-              type="button"
-              onClick={handleAddTransaction}
-              disabled={isLoading}
-              className="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 py-2 rounded-md hover:from-purple-600 hover:to-pink-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {isLoading ? '追加中...' : '取引を追加する'}
-            </button>
-          </div>
 
-          {/* 取引一覧 */}
-          {eventData.transactions && eventData.transactions.length > 0 && (
-            <div className="space-y-6" id="transactions">
-              <h3 className="text-2xl font-semibold text-purple-800 text-center">
-                支払い履歴
-              </h3>
-              <ul className="space-y-4">
-                {eventData.transactions.map((tx) => (
-                  <li 
-                    key={tx.id} 
-                    className="bg-white border border-gray-200 rounded-2xl shadow-sm hover:shadow-md transition-all cursor-pointer"
-                    onClick={() => setSelectedTransaction(tx)}
+            {/* 場所＆集合メモセクション */}
+            <div className="space-y-10 mt-16" id="location">
+              <h2 className="text-3xl font-semibold text-purple-800 text-center">
+                場所
+              </h2>
+              {/* 場所テキスト表示 */}
+              {eventData.location && (
+                <p className="text-center text-lg text-gray-700 mb-2">
+                  {eventData.location}
+                </p>
+              )}
+              <div className="rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-shadow">
+                {eventData.location ? (
+                  <iframe
+                    width="100%"
+                    height="320"
+                    frameBorder="0"
+                    style={{ border: 0 }}
+                    src={`https://www.google.com/maps/embed/v1/place?key=${process.env.REACT_APP_GOOGLE_MAPS_API_KEY}&q=${encodeURIComponent(
+                      eventData.location
+                    )}`}
+                    allowFullScreen
+                    title="Google Map"
+                  ></iframe>
+                ) : (
+                  <div className="w-full h-80 bg-gray-200 flex items-center justify-center">
+                    <p className="text-gray-600">
+                      地図を表示するには場所を入力してください
+                    </p>
+                  </div>
+                )}
+                {eventData.meetingMemo && (
+                  <div className="p-4 bg-white border-t border-gray-200">
+                    <p className="text-sm text-gray-700 text-center">
+                      {eventData.meetingMemo}
+                    </p>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* 立替登録セクション - デスクトップで2カラムレイアウト */}
+            <div id="expenses" className="space-y-6 mt-16">
+              <h2 className="text-3xl font-semibold text-purple-800 text-center">
+                支払いを記録する
+              </h2>
+              <div className="bg-gray-50 border border-gray-200 rounded-2xl shadow-md hover:shadow-xl transition-shadow p-8 space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="flex flex-col space-y-2">
+                    <label className="text-lg text-gray-700">何に使いましたか？</label>
+                    <input
+                      type="text"
+                      value={newTransDescription}
+                      onChange={(e) => setNewTransDescription(e.target.value)}
+                      placeholder="例: タクシー代"
+                      className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:border-indigo-500 transition"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="block text-lg font-medium text-gray-700">
+                      誰が
+                    </label>
+                    <select
+                      value={newTransPayer}
+                      onChange={(e) => handlePayerSelect(e.target.value)}
+                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                    >
+                      <option value="">選択してください</option>
+                      {displayedMembers.map((member) => (
+                        <option key={member.id} value={member.name}>
+                          {member.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+                <div className="flex justify-between items-center mb-2">
+                  <label className="text-lg text-gray-700">誰の分を</label>
+                  <button
+                    onClick={() => {
+                      const allNames = displayedMembers.map(member => member.name);
+                      // 全員選択されている場合は全解除、そうでない場合は全選択
+                      if (newTransBeneficiaries.length === allNames.length) {
+                        setNewTransBeneficiaries([]);
+                      } else {
+                        setNewTransBeneficiaries(allNames);
+                      }
+                    }}
+                    className="bg-gradient-to-r from-purple-100 via-pink-100 to-yellow-100 text-gray-700 px-4 py-1.5 rounded-full text-sm font-medium hover:shadow-md transition-all flex items-center space-x-1"
                   >
-                    <div className="p-4">
-                      <div className="flex justify-between items-start">
-                        <div className="space-y-1 min-w-0 flex-1 mr-4">
-                          <p className="text-lg font-medium text-gray-800">
-                            {tx.description}
-                          </p>
-                          <div className="flex items-center space-x-2 text-sm text-gray-500">
-                            <span className="font-medium text-indigo-600 whitespace-nowrap">{tx.payer}</span>
-                            <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                            </svg>
-                            <div className="truncate">
-                              {tx.beneficiaries.length > 2 
-                                ? `${tx.beneficiaries.slice(0, 2).join('、')} 他${tx.beneficiaries.length - 2}名`
-                                : tx.beneficiaries.join('、')}
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <span>全員を選択</span>
+                  </button>
+                </div>
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+                  {displayedMembers.map((member) => (
+                    <label
+                      key={member.id}
+                      className={`flex items-center space-x-3 p-3 rounded-xl border ${
+                        newTransBeneficiaries.includes(member.name)
+                          ? 'bg-gradient-to-r from-purple-50 to-pink-50 border-purple-200'
+                          : 'bg-white border-gray-200'
+                      } transition-all cursor-pointer hover:shadow-sm`}
+                    >
+                      <input
+                        type="checkbox"
+                        className="form-checkbox h-5 w-5 lg:h-6 lg:w-6 text-purple-600 rounded border-gray-300 focus:ring-purple-500"
+                        checked={newTransBeneficiaries.includes(member.name)}
+                        onChange={() => toggleBeneficiary(member.name)}
+                      />
+                      <span className="font-medium text-gray-700 truncate">
+                        {member.name}
+                      </span>
+                    </label>
+                  ))}
+                </div>
+                <div className="flex flex-col space-y-2">
+                  <label className="text-lg text-gray-700">いくら払った</label>
+                  <input
+                    type="number"
+                    value={newTransAmount}
+                    onChange={(e) => setNewTransAmount(e.target.value)}
+                    placeholder="例: 5000"
+                    className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:border-indigo-500 transition"
+                  />
+                </div>
+                <button
+                  type="button"
+                  onClick={handleAddTransaction}
+                  disabled={isLoading}
+                  className="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 py-2 rounded-md hover:from-purple-600 hover:to-pink-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                >
+                  {isLoading ? '追加中...' : '取引を追加する'}
+                </button>
+              </div>
+
+              {/* 取引一覧 - デスクトップで改善されたレイアウト */}
+              {eventData.transactions && eventData.transactions.length > 0 && (
+                <div className="space-y-6" id="transactions">
+                  <h3 className="text-2xl font-semibold text-purple-800 text-center">
+                    支払い履歴
+                  </h3>
+                  <ul className="space-y-4">
+                    {eventData.transactions.map((tx) => (
+                      <li 
+                        key={tx.id} 
+                        className="bg-white border border-gray-200 rounded-2xl shadow-sm hover:shadow-lg transition-all cursor-pointer transform hover:-translate-y-1"
+                        onClick={() => setSelectedTransaction(tx)}
+                      >
+                        <div className="p-4">
+                          <div className="flex justify-between items-start">
+                            <div className="space-y-1 min-w-0 flex-1 mr-4">
+                              <p className="text-lg font-medium text-gray-800">
+                                {tx.description}
+                              </p>
+                              <div className="flex items-center space-x-2 text-sm text-gray-500">
+                                <span className="font-medium text-indigo-600 whitespace-nowrap">{tx.payer}</span>
+                                <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                                </svg>
+                                <div className="truncate">
+                                  {tx.beneficiaries.length > 2 
+                                    ? `${tx.beneficiaries.slice(0, 2).join('、')} 他${tx.beneficiaries.length - 2}名`
+                                    : tx.beneficiaries.join('、')}
+                                </div>
+                              </div>
+                            </div>
+                            <div className="flex items-center space-x-3 flex-shrink-0">
+                              <span className="text-lg font-bold text-gray-900 whitespace-nowrap">
+                                ¥{tx.amount.toLocaleString()}
+                              </span>
+                              <button
+                                onClick={(e) => handleDeleteTransaction(tx.id, e)}
+                                className="p-1.5 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-full transition-colors"
+                                aria-label="削除"
+                              >
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                  <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
+                                </svg>
+                              </button>
                             </div>
                           </div>
                         </div>
-                        <div className="flex items-center space-x-3 flex-shrink-0">
-                          <span className="text-lg font-bold text-gray-900 whitespace-nowrap">
-                            ¥{tx.amount.toLocaleString()}
-                          </span>
-                          <button
-                            onClick={(e) => handleDeleteTransaction(tx.id, e)}
-                            className="p-1.5 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-full transition-colors"
-                            aria-label="削除"
-                          >
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                              <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
-                            </svg>
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-
-              {/* 精算結果セクション */}
-              {eventData.transactions.length >= 2 && (
-                <div id="settlement-results" className="bg-white border border-gray-200 rounded-2xl shadow-md p-8 mx-[-1rem]">
-                  <h3 className="text-center text-2xl font-semibold mb-6 text-purple-800">
-                    清算結果
-                  </h3>
-                  <div className="space-y-4">
-                    {settlementResult.settlements.map((settlement, index) => (
-                      <div key={index} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg mx-[-0.5rem]">
-                        <div className="flex items-center space-x-3">
-                          <span className="font-medium text-gray-700">{settlement.from}</span>
-                          <svg className="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                          </svg>
-                          <span className="font-medium text-gray-700">{settlement.to}</span>
-                        </div>
-                        <span className="text-lg font-bold text-indigo-600">
-                          ¥{settlement.amount.toLocaleString()}
-                        </span>
-                      </div>
+                      </li>
                     ))}
-                  </div>
-                  <button
-                    onClick={handleCopySettlement}
-                    className="mt-6 w-full bg-gray-100 text-gray-700 px-4 py-2 rounded-full hover:bg-gray-200 transition"
-                  >
-                    結果をコピー
-                  </button>
+                  </ul>
                 </div>
               )}
             </div>
-          )}
+          </motion.div>
         </div>
-      </motion.div>
+
+        {/* サイドバー - デスクトップでは4カラム */}
+        <div className="lg:col-span-4 space-y-8">
+          {/* メンバーセクション - デスクトップでは固定的なサイドバー */}
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="bg-white border border-gray-200 rounded-2xl shadow-md p-6 sticky top-8"
+          >
+            <div className="space-y-8" id="members">
+              <div className="text-center space-y-4">
+                <h2 className="text-2xl font-semibold text-purple-800">
+                  メンバー
+                </h2>
+                <div className="flex justify-center gap-8">
+                  <div className="text-center">
+                    <span className="text-green-600 font-bold text-xl">{getMemberCounts().参加}</span>
+                    <p className="text-sm text-gray-600">参加</p>
+                  </div>
+                  <div className="text-center">
+                    <span className="text-red-600 font-bold text-xl">{getMemberCounts().不参加}</span>
+                    <p className="text-sm text-gray-600">不参加</p>
+                  </div>
+                  <div className="text-center">
+                    <span className="text-yellow-600 font-bold text-xl">{getMemberCounts().未定}</span>
+                    <p className="text-sm text-gray-600">未定</p>
+                  </div>
+                </div>
+              </div>
+              
+              {/* 既存のメンバー追加ボタンとメンバーリスト */}
+              <div className="flex justify-center">
+                <button
+                  onClick={() => setIsMemberDialogOpen(true)}
+                  className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-3 rounded-xl font-medium hover:opacity-90 transition-all flex items-center space-x-2"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                  </svg>
+                  <span>参加する！</span>
+                </button>
+              </div>
+              
+              {/* 既存のメンバーグリッド - デスクトップでは1行2列 */}
+              <div className="grid grid-cols-2 gap-3">
+                {sortedMembers.map((member) => (
+                  <div
+                    key={member.id}
+                    onClick={() => {
+                      if (member.id !== 'organizer') {
+                        setEditingMember(member);
+                        setIsEditMemberDialogOpen(true);
+                      }
+                    }}
+                    className={`p-3 rounded-xl border ${
+                      member.status === '参加'
+                        ? 'bg-green-50 border-green-200'
+                        : member.status === '不参加'
+                        ? 'bg-red-50 border-red-200'
+                        : 'bg-yellow-50 border-yellow-200'
+                    } ${
+                      member.id !== 'organizer' ? 'cursor-pointer hover:shadow-md transform hover:-translate-y-1' : ''
+                    } transition-all`}
+                  >
+                    <div className="text-center">
+                      <div className={`text-gray-800 mb-1 truncate ${member.id === 'organizer' ? 'font-bold' : 'font-medium'}`}>
+                        {member.name}
+                        {member.id === 'organizer' && (
+                          <span className="text-xs text-gray-500 ml-1">(幹事)</span>
+                        )}
+                      </div>
+                      <div className={`text-sm ${
+                        member.status === '参加'
+                          ? 'text-green-600'
+                          : member.status === '不参加'
+                          ? 'text-red-600'
+                          : 'text-yellow-600'
+                      }`}>
+                        {member.status}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* 精算結果セクション - デスクトップではサイドバーに追加 */}
+            {eventData.transactions && eventData.transactions.length >= 2 && (
+              <div id="settlement-results" className="mt-8 pt-8 border-t border-gray-200">
+                <h3 className="text-center text-2xl font-semibold mb-6 text-purple-800">
+                  清算結果
+                </h3>
+                <div className="space-y-4">
+                  {settlementResult.settlements.map((settlement, index) => (
+                    <div key={index} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                      <div className="flex flex-col items-start">
+                        <span className="font-medium text-gray-700">{settlement.from}</span>
+                        <div className="flex items-center text-gray-500">
+                          <svg className="h-4 w-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                          </svg>
+                          <span>{settlement.to}</span>
+                        </div>
+                      </div>
+                      <span className="text-lg font-bold text-indigo-600">
+                        ¥{settlement.amount.toLocaleString()}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+                <button
+                  onClick={handleCopySettlement}
+                  className="mt-6 w-full bg-gray-100 text-gray-700 px-4 py-2 rounded-full hover:bg-gray-200 transition"
+                >
+                  結果をコピー
+                </button>
+              </div>
+            )}
+          </motion.div>
+        </div>
+      </div>
 
       {/* メンバー追加ダイアログ */}
       {isMemberDialogOpen && (
@@ -1031,19 +1042,6 @@ export function InvitationViewPage() {
         transaction={selectedTransaction}
         onClose={() => setSelectedTransaction(null)}
       />
-
-      {/* ページ最下部にイベント削除ボタンを追加
-      <div className="mt-16 pb-8 text-center border-t border-gray-200 pt-8">
-        <button
-          onClick={handleDeleteEvent}
-          className="bg-white text-red-600 hover:text-red-700 px-6 py-3 rounded-xl font-medium border-2 border-red-200 hover:border-red-300 hover:bg-red-50 transition-all flex items-center space-x-2 mx-auto"
-        >
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-          </svg>
-          <span>このイベントを削除する</span>
-        </button>
-      </div> */}
     </div>
   );
 }
