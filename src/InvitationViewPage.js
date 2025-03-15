@@ -1032,7 +1032,7 @@ export function InvitationViewPage() {
         onClose={() => setSelectedTransaction(null)}
       />
 
-      {/* ページ最下部にイベント削除ボタンを追加 */}
+      {/* ページ最下部にイベント削除ボタンを追加
       <div className="mt-16 pb-8 text-center border-t border-gray-200 pt-8">
         <button
           onClick={handleDeleteEvent}
@@ -1043,7 +1043,7 @@ export function InvitationViewPage() {
           </svg>
           <span>このイベントを削除する</span>
         </button>
-      </div>
+      </div> */}
     </div>
   );
 }
