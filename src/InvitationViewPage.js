@@ -770,23 +770,23 @@ export function InvitationViewPage() {
                 <span>全員を選択</span>
               </button>
             </div>
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
               {displayedMembers.map((member) => (
                 <label
                   key={member.id}
-                  className={`flex items-center space-x-2 p-2 rounded-lg border border-gray-200 
-                    ${newTransBeneficiaries.includes(member.name) 
-                      ? 'bg-gradient-to-r from-purple-50 via-pink-50 to-yellow-50 border-purple-200' 
-                      : 'bg-white'
-                    } transition-all cursor-pointer hover:shadow-sm`}
+                  className={`flex items-center space-x-3 p-3 rounded-xl border ${
+                    newTransBeneficiaries.includes(member.name)
+                      ? 'bg-gradient-to-r from-purple-50 to-pink-50 border-purple-200'
+                      : 'bg-white border-gray-200'
+                  } transition-all cursor-pointer hover:shadow-sm`}
                 >
                   <input
                     type="checkbox"
-                    className="form-checkbox h-4 w-4 text-purple-600 rounded border-gray-300 focus:ring-purple-500"
+                    className="form-checkbox h-5 w-5 lg:h-6 lg:w-6 text-purple-600 rounded border-gray-300 focus:ring-purple-500"
                     checked={newTransBeneficiaries.includes(member.name)}
                     onChange={() => toggleBeneficiary(member.name)}
                   />
-                  <span className="text-sm font-medium text-gray-700 truncate">
+                  <span className="font-medium text-gray-700 truncate">
                     {member.name}
                   </span>
                 </label>
