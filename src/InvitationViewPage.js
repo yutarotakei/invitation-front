@@ -2,7 +2,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Dialog } from '@mui/material';
 
 export function InvitationViewPage() {
   // URL例: /view/:id となっているので、id を受け取る
@@ -436,44 +435,6 @@ export function InvitationViewPage() {
     </div>
   );
 
-  // メンバー数を計算する関数
-  const getMemberCounts = () => {
-    const counts = {
-      参加: 0,
-      不参加: 0,
-      未定: 0
-    };
-    sortedMembers.forEach(member => {
-      counts[member.status]++;
-    });
-    return counts;
-  };
-
-  // イベント削除処理
-  const handleDeleteEvent = async () => {
-    if (!window.confirm('本当にこのイベントを削除しますか？\nこの操作は取り消せません。')) {
-      return;
-    }
-    setIsLoading(true);
-    try {
-      const response = await fetch(
-        `${process.env.REACT_APP_API_URL || ''}/api/events/${id}`,
-        {
-          method: 'DELETE',
-        }
-      );
-      if (!response.ok) {
-        throw new Error('イベントの削除に失敗しました');
-      }
-      navigate('/');
-    } catch (err) {
-      console.error('Error:', err);
-      alert('イベントの削除に失敗しました');
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   // メインレンダリング
   if (initialLoading) return <InitialLoadingOverlay />;
   if (error) return (
@@ -602,21 +563,6 @@ export function InvitationViewPage() {
           <h2 className="text-3xl font-semibold text-purple-800 text-center">
             メンバー
           </h2>
-          {/* メンバー数の表示 */}
-          <div className="flex justify-center gap-6">
-            <div className="text-center">
-              <span className="text-green-600 font-bold text-lg">{getMemberCounts().参加}</span>
-              <p className="text-sm text-gray-600">参加</p>
-            </div>
-            <div className="text-center">
-              <span className="text-red-600 font-bold text-lg">{getMemberCounts().不参加}</span>
-              <p className="text-sm text-gray-600">不参加</p>
-            </div>
-            <div className="text-center">
-              <span className="text-yellow-600 font-bold text-lg">{getMemberCounts().未定}</span>
-              <p className="text-sm text-gray-600">未定</p>
-            </div>
-          </div>
           <div className="flex justify-center">
             <button
               onClick={() => setIsMemberDialogOpen(true)}
@@ -892,69 +838,77 @@ export function InvitationViewPage() {
         </div>
       </motion.div>
 
-      {/* メンバー追加モーダル */}
-      <Dialog
-        open={isMemberDialogOpen}
-        onClose={() => setIsMemberDialogOpen(false)}
-        className="fixed inset-0 z-50 overflow-y-auto"
-      >
-        <div className="min-h-screen px-4 text-center">
-          <Dialog.Overlay className="fixed inset-0 bg-black opacity-30" />
-          <div className="inline-block align-middle bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-            <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-              <div className="sm:flex sm:items-start">
-                <div className="mt-3 text-center sm:mt-0 sm:text-left w-full">
-                  <h3 className="text-lg leading-6 font-medium text-gray-900">
-                    メンバーとして参加
-                  </h3>
-                  <div className="mt-2 space-y-4">
-                    <div>
-                      <input
-                        type="text"
-                        value={newMemberName}
-                        onChange={(e) => setNewMemberName(e.target.value)}
-                        placeholder="名前を入力"
-                        className="w-full border border-gray-300 rounded-md px-3 py-2"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
-                        参加ステータス
-                      </label>
-                      <select
-                        value={newMemberStatus}
-                        onChange={(e) => setNewMemberStatus(e.target.value)}
-                        className="w-full border border-gray-300 rounded-md px-3 py-2"
-                      >
-                        <option value="参加">参加</option>
-                        <option value="不参加">不参加</option>
-                        <option value="未定">未定</option>
-                      </select>
-                      <p className="mt-2 text-sm text-gray-500 italic">
-                        ※ステータスはあとから変更できます
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+      {/* メンバー追加ダイアログ */}
+      {isMemberDialogOpen && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 bg-black bg-opacity-40 backdrop-blur-sm flex items-center justify-center z-50"
+        >
+          <motion.div
+            initial={{ scale: 0.8 }}
+            animate={{ scale: 1 }}
+            transition={{ duration: 0.3 }}
+            className="bg-white border border-gray-200 rounded-xl shadow-lg p-10 w-full max-w-md space-y-6"
+          >
+            <h3 className="text-3xl font-semibold text-center text-purple-800">
+              メンバーを追加
+            </h3>
+            <input
+              type="text"
+              value={newMemberName}
+              onChange={(e) => setNewMemberName(e.target.value)}
+              placeholder="名前を入力"
+              className="w-full border border-gray-300 rounded-lg p-4 focus:outline-none focus:border-indigo-500 transition"
+            />
+            <div className="flex justify-around">
               <button
-                onClick={handleAddMember}
-                className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-gradient-to-r from-pink-500 to-purple-600 text-base font-medium text-white hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 sm:ml-3 sm:w-auto sm:text-sm"
+                onClick={() => setNewMemberStatus('参加')}
+                className={`px-6 py-3 rounded-full text-xl transition ${
+                  newMemberStatus === '参加'
+                    ? 'bg-green-600 text-white'
+                    : 'bg-gray-200 text-gray-700 hover:bg-green-100'
+                }`}
               >
-                追加
+                参加
               </button>
               <button
-                onClick={() => setIsMemberDialogOpen(false)}
-                className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
+                onClick={() => setNewMemberStatus('不参加')}
+                className={`px-6 py-3 rounded-full text-xl transition ${
+                  newMemberStatus === '不参加'
+                    ? 'bg-red-600 text-white'
+                    : 'bg-gray-200 text-gray-700 hover:bg-red-100'
+                }`}
               >
-                キャンセル
+                不参加
+              </button>
+              <button
+                onClick={() => setNewMemberStatus('未定')}
+                className={`px-6 py-3 rounded-full text-xl transition ${
+                  newMemberStatus === '未定'
+                    ? 'bg-yellow-500 text-white'
+                    : 'bg-gray-200 text-gray-700 hover:bg-yellow-100'
+                }`}
+              >
+                未定
               </button>
             </div>
-          </div>
-        </div>
-      </Dialog>
+            <button
+              onClick={handleAddMember}
+              className="w-full bg-gradient-to-r from-pink-500 to-purple-600 text-white rounded-full px-6 py-3 text-xl hover:opacity-90 transition"
+            >
+              追加
+            </button>
+            <button
+              onClick={() => setIsMemberDialogOpen(false)}
+              className="w-full mt-4 bg-gray-200 text-gray-700 rounded-full px-6 py-3 text-xl hover:bg-gray-300 transition"
+            >
+              キャンセル
+            </button>
+          </motion.div>
+        </motion.div>
+      )}
 
       {/* メンバー編集ダイアログ */}
       {isEditMemberDialogOpen && editingMember && (
@@ -1017,16 +971,6 @@ export function InvitationViewPage() {
         transaction={selectedTransaction}
         onClose={() => setSelectedTransaction(null)}
       />
-
-      {/* ページ最下部にイベント削除ボタンを追加 */}
-      <div className="mt-16 pb-8 text-center">
-        <button
-          onClick={handleDeleteEvent}
-          className="text-red-600 hover:text-red-800 text-sm font-medium border border-red-300 rounded-lg px-4 py-2 hover:bg-red-50 transition-colors"
-        >
-          このイベントを削除する
-        </button>
-      </div>
     </div>
   );
 }
