@@ -491,11 +491,11 @@ export function InvitationViewPage() {
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-100 via-pink-100 to-yellow-100 px-4 sm:px-6 lg:px-8 py-8">
+    <div className="min-h-screen bg-gradient-to-br from-purple-100 via-pink-100 to-yellow-100 px-4 sm:px-6 py-8">
       {isLoading && <LoadingOverlay />}
       
-      {/* ホームへ戻るボタン - コンテナ幅を調整 */}
-      <div className="max-w-4xl mx-auto mb-4">
+      {/* ホームへ戻るボタン */}
+      <div className="max-w-3xl mx-auto mb-4">
         <button
           onClick={() => navigate('/')}
           className="flex items-center text-indigo-800 text-lg focus:outline-none"
@@ -508,7 +508,7 @@ export function InvitationViewPage() {
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="w-full max-w-4xl mx-auto bg-white border border-gray-200 rounded-2xl shadow-md hover:shadow-xl p-6 sm:p-8 lg:p-10"
+        className="w-full max-w-3xl mx-auto bg-white border border-gray-200 rounded-2xl shadow-md hover:shadow-xl p-6 sm:p-8"
       >
         {/* タイトルと日付 */}
         <div className="text-center pb-8">
@@ -631,8 +631,8 @@ export function InvitationViewPage() {
             </button>
           </div>
           
-          {/* 既存のメンバーグリッド - PCでの表示列数を増やす */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+          {/* 既存のメンバーグリッド */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
             {sortedMembers.map((member) => (
               <div
                 key={member.id}
@@ -715,13 +715,13 @@ export function InvitationViewPage() {
           </div>
         </div>
 
-        {/* 立替登録セクション - レイアウトを調整 */}
+        {/* 立替登録セクション */}
         <div id="expenses" className="space-y-6 mt-16">
           <h2 className="text-3xl font-semibold text-purple-800 text-center">
             支払いを記録する
           </h2>
-          <div className="bg-gray-50 border border-gray-200 rounded-2xl shadow-md hover:shadow-xl p-6 lg:p-8 space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
+          <div className="bg-gray-50 border border-gray-200 rounded-2xl shadow-md hover:shadow-xl p-8 space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="flex flex-col space-y-2">
                 <label className="text-lg text-gray-700">何に使いましたか？</label>
                 <input
@@ -770,7 +770,7 @@ export function InvitationViewPage() {
                 <span>全員を選択</span>
               </button>
             </div>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
+            <div className="grid grid-cols-2 gap-2">
               {displayedMembers.map((member) => (
                 <label
                   key={member.id}
@@ -812,9 +812,9 @@ export function InvitationViewPage() {
             </button>
           </div>
 
-          {/* 取引一覧 - 最大幅を設定 */}
+          {/* 取引一覧 */}
           {eventData.transactions && eventData.transactions.length > 0 && (
-            <div className="space-y-6 max-w-3xl mx-auto" id="transactions">
+            <div className="space-y-6" id="transactions">
               <h3 className="text-2xl font-semibold text-purple-800 text-center">
                 支払い履歴
               </h3>
@@ -863,9 +863,9 @@ export function InvitationViewPage() {
                 ))}
               </ul>
 
-              {/* 精算結果セクション - パディングを調整 */}
+              {/* 精算結果セクション */}
               {eventData.transactions.length >= 2 && (
-                <div id="settlement-results" className="bg-white border border-gray-200 rounded-2xl shadow-md p-6 lg:p-8 mx-[-1rem]">
+                <div id="settlement-results" className="bg-white border border-gray-200 rounded-2xl shadow-md p-8 mx-[-1rem]">
                   <h3 className="text-center text-2xl font-semibold mb-6 text-purple-800">
                     清算結果
                   </h3>
