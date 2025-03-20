@@ -1,12 +1,13 @@
 // InvitationViewPage.js
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 
 export function InvitationViewPage() {
   // URL例: /view/:id となっているので、id を受け取る
   const { id } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [initialLoading, setInitialLoading] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
@@ -34,10 +35,10 @@ export function InvitationViewPage() {
   // 取引詳細モーダルの状態
   const [selectedTransaction, setSelectedTransaction] = useState(null);
 
-  // ハッシュに基づいてスクロールする
-  useEffect(() => {
-    if (window.location.hash) {
-      const element = document.querySelector(window.location.hash);
+  // ハッシュに基づいてスクロールする関数
+  const scrollToHash = () => {
+    if (location.hash) {
+      const element = document.querySelector(location.hash);
       if (element) {
         // 少し遅延を入れてスクロール（レンダリング完了を待つため）
         setTimeout(() => {
@@ -45,7 +46,12 @@ export function InvitationViewPage() {
         }, 500);
       }
     }
-  }, []);  // コンポーネントのマウント時に1回だけ実行
+  };
+
+  // コンポーネントのマウント時と location.hash が変更されたときに実行
+  useEffect(() => {
+    scrollToHash();
+  }, [location.hash, eventData]); // eventDataが読み込まれた後にもスクロールを確認
 
   // イベントデータの取得
   const fetchEvent = async () => {
@@ -1064,19 +1070,6 @@ export function InvitationViewPage() {
         transaction={selectedTransaction}
         onClose={() => setSelectedTransaction(null)}
       />
-
-      {/* ページ最下部にイベント削除ボタンを追加
-      <div className="mt-16 pb-8 text-center border-t border-gray-200 pt-8">
-        <button
-          onClick={handleDeleteEvent}
-          className="bg-white text-red-600 hover:text-red-700 px-6 py-3 rounded-xl font-medium border-2 border-red-200 hover:border-red-300 hover:bg-red-50 transition-all flex items-center space-x-2 mx-auto"
-        >
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-          </svg>
-          <span>このイベントを削除する</span>
-        </button>
-      </div> */}
     </div>
   );
 }
