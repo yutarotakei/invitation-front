@@ -815,9 +815,29 @@ export function InvitationViewPage() {
           {/* 取引一覧 */}
           {eventData.transactions && eventData.transactions.length > 0 && (
             <div className="space-y-6" id="transactions">
-              <h3 className="text-2xl font-semibold text-purple-800 text-center">
-                支払い履歴
-              </h3>
+              <div className="flex justify-between items-center">
+                <h3 className="text-2xl font-semibold text-purple-800">
+                  支払い履歴
+                </h3>
+                <button
+                  onClick={() => {
+                    const shareUrl = `${window.location.origin}${window.location.pathname}#transactions`;
+                    navigator.clipboard.writeText(shareUrl)
+                      .then(() => {
+                        alert('支払い履歴へのリンクをコピーしました！');
+                      })
+                      .catch(() => {
+                        alert('リンクのコピーに失敗しました。');
+                      });
+                  }}
+                  className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-purple-100 via-pink-100 to-yellow-100 text-gray-700 rounded-xl hover:shadow-md transition-all"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+                  </svg>
+                  <span>共有</span>
+                </button>
+              </div>
               <ul className="space-y-4">
                 {eventData.transactions.map((tx) => (
                   <li 
