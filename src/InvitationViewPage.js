@@ -34,6 +34,19 @@ export function InvitationViewPage() {
   // 取引詳細モーダルの状態
   const [selectedTransaction, setSelectedTransaction] = useState(null);
 
+  // ハッシュに基づいてスクロールする
+  useEffect(() => {
+    if (window.location.hash) {
+      const element = document.querySelector(window.location.hash);
+      if (element) {
+        // 少し遅延を入れてスクロール（レンダリング完了を待つため）
+        setTimeout(() => {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }, 500);
+      }
+    }
+  }, []);  // コンポーネントのマウント時に1回だけ実行
+
   // イベントデータの取得
   const fetchEvent = async () => {
     try {
@@ -815,7 +828,7 @@ export function InvitationViewPage() {
           {/* 取引一覧 */}
           {eventData.transactions && eventData.transactions.length > 0 && (
             <div className="space-y-6" id="transactions">
-              <div className="flex justify-between items-center">
+              <div className="flex flex-col items-center space-y-4">
                 <h3 className="text-2xl font-semibold text-purple-800">
                   支払い履歴
                 </h3>
